@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>LcQuiromasajes - Contacto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="presentacion">
+        <h1>Relaja tu cuerpo, equilibra tu mente</h1>
+        <p>En LcQuiromasajes cuidamos de ti con técnicas personalizadas de bienestar y terapia manual.</p>
+    </header>
+
+    <main class="contenedor-principal">
+        <form action="#" method="POST"> 
+            
+            <div class="grupo-entrada">
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Ej. María García" required>
+            </div>
+
+            <div class="grupo-entrada">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
+            </div>
+
+            <div class="grupo-entrada">
+                <label for="sexo">Sexo</label>
+                <select id="sexo" name="sexo" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                    <option value="otro">Otro / Prefiero no decirlo</option>
+                </select>
+            </div>
+
+            <div class="grupo-entrada">
+                <label for="problema">¿Qué te gustaría tratar?</label>
+                <textarea id="problema" name="problema" rows="4" placeholder="Cuéntanos brevemente qué necesitas..." required></textarea>
+            </div>
+
+            <div class="seccion-verificacion">
+                <div class="opcion-verificar">
+                    <input type="checkbox" id="info" name="marketing">
+                    <label for="info">Deseo recibir información sobre servicios y promociones</label>
+                </div>
+
+                <div class="opcion-verificar">
+                    <input type="checkbox" id="privacidad" name="privacidad" required>
+                    <label for="privacidad">He leído y acepto la <strong>política de privacidad</strong></label>
+                </div>
+            </div>
+
+            <button type="submit" class="boton-enviar">Enviar solicitud</button>
+        </form>
+    </main>
+
+</body>
+</html>
