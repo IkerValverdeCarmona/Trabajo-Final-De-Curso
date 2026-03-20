@@ -19,6 +19,7 @@
 
     <header class="navbar" id="navbar">
         <div class="nav-container">
+            <!--Tengo que hacer el logo de la empresa-->
             <a href="#" class="brand-logo">LC Quiromasajes</a>
 
             <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -37,6 +38,35 @@
                         <option value="es">ES</option>
                         <option value="en">EN</option>
                     </select>
+                </div>
+
+                <div class="user-actions">
+                    <div id="guestState">
+                        <button class="btn btn-outline-primary btn-sm" id="btnLoginToggle">Entrar / Registro</button>
+                    </div>
+
+                    <div id="loggedState" class="user-profile hidden">
+                        <div class="user-trigger" id="userMenuBtn">
+                            <div class="avatar">CM</div>
+                            <span class="user-name">Cliente</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </div>
+
+                        <div class="dropdown-menu" id="userDropdown">
+                            <div class="dropdown-header">
+                                <p><strong>Carlos Martínez</strong></p>
+                                <p class="text-muted">carlos@email.com</p>
+                            </div>
+                            <hr>
+                            <a href="#mis-citas">Mis Citas</a>
+                            <a href="#mi-perfil">Ajustes de Perfil</a>
+                            <hr>
+                            <a href="#" id="btnLogout" class="text-danger">Cerrar Sesión</a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -111,8 +141,7 @@
             <p>&copy; 2026 LC Quiromasajes. Proyecto de Desarrollo de Aplicaciones Web.</p>
         </div>
     </footer>
-
-    <script src="script.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>

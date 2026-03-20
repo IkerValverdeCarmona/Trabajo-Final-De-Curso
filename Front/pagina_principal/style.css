@@ -1,4 +1,6 @@
+/* --- Variables de Diseño Corporativo --- */
 :root {
+    /* Colores */
     --color-primary: #EB6250;
     --color-primary-hover: #D75443;
     --color-bg-start: #FFF7EE;
@@ -6,9 +8,13 @@
     --color-text-dark: #333333;
     --color-text-muted: #666666;
     --color-white: #FFFFFF;
+
+    /* Tipografía */
     --font-title: 'Playfair Display', serif;
     --font-body: 'Poppins', sans-serif;
     --line-height-base: 1.6;
+
+    /* Formas y Sombras */
     --radius-input: 12px;
     --radius-card: 20px;
     --radius-btn: 50px;
@@ -16,6 +22,7 @@
     --shadow-nav: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
+/* --- Reseteo Básico --- */
 * {
     margin: 0;
     padding: 0;
@@ -45,6 +52,7 @@ h4 {
     color: #1A1A1A;
 }
 
+/* --- Navegación --- */
 .navbar {
     position: sticky;
     top: 0;
@@ -117,6 +125,110 @@ h4 {
     border-color: var(--color-primary);
 }
 
+/* --- Área de Usuario --- */
+.user-actions {
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.user-profile {
+    position: relative;
+}
+
+.user-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: var(--radius-btn);
+    transition: background-color 0.3s;
+}
+
+.user-trigger:hover {
+    background-color: var(--color-bg-start);
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.user-name {
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background-color: var(--color-white);
+    border-radius: var(--radius-input);
+    box-shadow: var(--shadow-card);
+    min-width: 220px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1001;
+    overflow: hidden;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-header {
+    padding: 15px 20px;
+    background-color: var(--color-bg-start);
+}
+
+.dropdown-header .text-muted {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 12px 20px;
+    color: var(--color-text-dark);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.dropdown-menu a:hover {
+    background-color: var(--color-bg-start);
+    color: var(--color-primary);
+}
+
+.dropdown-menu hr {
+    border: none;
+    border-top: 1px solid #EEEEEE;
+    margin: 0;
+}
+
+.text-danger {
+    color: #d9534f !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Botón menú móvil */
 .mobile-menu-btn {
     display: none;
     background: none;
@@ -135,6 +247,7 @@ h4 {
     transition: all 0.3s;
 }
 
+/* --- Botones --- */
 .btn {
     display: inline-block;
     border-radius: var(--radius-btn);
@@ -171,11 +284,24 @@ h4 {
     color: var(--color-white);
 }
 
+.btn-outline-primary {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    padding: 8px 20px;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
 .btn-sm {
     padding: 10px 24px;
     font-size: 0.9rem;
 }
 
+/* --- Sección Hero --- */
 .hero-section {
     padding: 100px 5%;
     text-align: center;
@@ -210,6 +336,7 @@ h4 {
     justify-content: center;
 }
 
+/* --- Sección Servicios --- */
 .services-section {
     padding: 80px 5%;
     max-width: 1200px;
@@ -266,6 +393,7 @@ h4 {
     flex-grow: 1;
 }
 
+/* --- Footer --- */
 .site-footer {
     background-color: var(--color-white);
     padding: 60px 5% 20px;
@@ -304,6 +432,7 @@ h4 {
     font-size: 0.9rem;
 }
 
+/* --- Diseño Responsive (Móviles) --- */
 @media (max-width: 900px) {
     .nav-links {
         display: none;
@@ -331,6 +460,19 @@ h4 {
         flex-direction: column;
         width: 100%;
         margin-top: 20px;
+    }
+
+    .user-actions {
+        margin-left: 0;
+        margin-top: 20px;
+        justify-content: center;
+    }
+
+    .dropdown-menu {
+        position: static;
+        box-shadow: none;
+        width: 100%;
+        text-align: center;
     }
 
     .mobile-menu-btn {
