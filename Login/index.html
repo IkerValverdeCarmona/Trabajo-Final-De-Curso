@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Acceso - LC Quiromasajes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../Front/pagina_principal/style.css">
+</head>
+
+<body>
+    <header class="presentacion" style="text-align: center; padding: 40px 5%;">
+        <h1>Bienvenido a LC Quiromasajes</h1>
+        <p>Accede a tu cuenta o regístrate para gestionar tus citas.</p>
+    </header>
+
+    <main class="contenedor-principal"
+        style="max-width: 500px; margin: 0 auto; background-color: var(--color-white); padding: 40px; border-radius: var(--radius-card); box-shadow: var(--shadow-card);">
+
+        <form action="procesar_auth.php" method="POST" id="form-login">
+            <input type="hidden" name="accion" value="login">
+            <div class="grupo-entrada" style="margin-bottom: 20px;">
+                <label for="email_login">Correo electrónico</label>
+                <input type="email" id="email_login" name="email" class="input-control"
+                    style="width: 100%; margin-top: 8px;" required>
+            </div>
+            <div class="grupo-entrada" style="margin-bottom: 30px;">
+                <label for="pass_login">Contraseña</label>
+                <input type="password" id="pass_login" name="password" class="input-control"
+                    style="width: 100%; margin-top: 8px;" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
+                ¿No tienes cuenta? <a href="#" id="toggle-registro"
+                    style="color: var(--color-primary); font-weight: 500;">Regístrate aquí</a>
+            </p>
+        </form>
+
+        <form action="procesar_auth.php" method="POST" id="form-registro" class="hidden">
+            <input type="hidden" name="accion" value="registro">
+            <div class="grupo-entrada" style="margin-bottom: 20px;">
+                <label for="email_reg">Correo electrónico</label>
+                <input type="email" id="email_reg" name="email" class="input-control"
+                    style="width: 100%; margin-top: 8px;" required>
+            </div>
+            <div class="grupo-entrada" style="margin-bottom: 30px;">
+                <label for="pass_reg">Contraseña</label>
+                <input type="password" id="pass_reg" name="password" class="input-control"
+                    style="width: 100%; margin-top: 8px;" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Crear Cuenta</button>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
+                ¿Ya tienes cuenta? <a href="#" id="toggle-login"
+                    style="color: var(--color-primary); font-weight: 500;">Inicia sesión</a>
+            </p>
+        </form>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="../Front/pagina_principal/index.php"
+                style="color: var(--color-text-muted); text-decoration: none; font-size: 0.9rem;">&larr; Volver al
+                inicio</a>
+        </div>
+    </main>
+
+    <script>
+        const formLogin = document.getElementById('form-login');
+        const formRegistro = document.getElementById('form-registro');
+
+        document.getElementById('toggle-registro').addEventListener('click', (e) => {
+            e.preventDefault();
+            formLogin.classList.add('hidden');
+            formRegistro.classList.remove('hidden');
+        });
+
+        document.getElementById('toggle-login').addEventListener('click', (e) => {
+            e.preventDefault();
+            formRegistro.classList.add('hidden');
+            formLogin.classList.remove('hidden');
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('action') === 'register') {
+            formLogin.classList.add('hidden');
+            formRegistro.classList.remove('hidden');
+        }
+    </script>
+</body>
+
+</html>
