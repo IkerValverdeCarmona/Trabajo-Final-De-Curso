@@ -79,6 +79,8 @@ h4 {
     color: var(--color-primary);
     text-decoration: none;
     font-weight: 700;
+    white-space: nowrap; /* Evita que salte de línea */
+    flex-shrink: 0;      /* Evita que los botones lo aplasten */
 }
 
 .nav-links {
@@ -108,6 +110,7 @@ h4 {
 .nav-controls {
     display: flex;
     gap: 12px;
+    flex-shrink: 0; /* Mantiene su tamaño original */
 }
 
 .input-control {
@@ -130,6 +133,7 @@ h4 {
     margin-left: 15px;
     display: flex;
     align-items: center;
+    flex-shrink: 0; /* Mantiene su tamaño original */
 }
 
 .user-profile {

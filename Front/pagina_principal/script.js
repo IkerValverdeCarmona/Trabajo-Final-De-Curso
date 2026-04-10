@@ -85,3 +85,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Funcionalidad del Menú de Usuario (Dropdown)
+    const userMenuBtn = document.getElementById('userMenuBtn');
+    const userDropdown = document.getElementById('userDropdown');
+
+    if (userMenuBtn && userDropdown) {
+        // Abrir/Cerrar al hacer clic en el botón
+        userMenuBtn.addEventListener('click', function(event) {
+            event.stopPropagation(); // Evita que el clic se propague al documento
+            userDropdown.classList.toggle('show');
+        });
+
+        // Cerrar el menú si el usuario hace clic fuera de él
+        document.addEventListener('click', function(event) {
+            if (!userMenuBtn.contains(event.target) && !userDropdown.contains(event.target)) {
+                userDropdown.classList.remove('show');
+            }
+        });
+    }
+
+    // 2. Funcionalidad del Menú Móvil (Hamburguesa) - Ya que estamos, lo dejamos funcionando
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.getElementById('navLinks');
+
+    if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+        });
+    }
+});

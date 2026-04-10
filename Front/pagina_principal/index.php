@@ -39,8 +39,8 @@
                             <a href="../../Login/index.html" class="btn btn-outline-primary btn-sm">Iniciar Sesión</a>
                             <a href="../../Login/index.html?action=register" class="btn btn-primary btn-sm">Registrarse</a>
                         </div>
-                    <?php
-else: ?>
+                    
+                    <?php else: ?>
                         <div id="loggedState" class="user-profile">
                             <div class="user-trigger" id="userMenuBtn">
                                 <div class="avatar"><?php echo strtoupper(substr($_SESSION['email'], 0, 1)); ?></div>
@@ -53,13 +53,12 @@ else: ?>
                                 </div>
                                 <hr>
                                 <a href="#mis-citas">Mis Citas</a>
-                                <a href="#mi-perfil">Ajustes</a>
+                                <a href="perfil.php">Mi Perfil</a> 
                                 <hr>
                                 <a href="../../Login/logout.php" class="text-danger">Cerrar Sesión</a>
                             </div>
                         </div>
-                    <?php
-endif; ?>
+                    <?php endif; ?>
                 </div>
             </nav>
         </div>
