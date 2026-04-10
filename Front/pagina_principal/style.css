@@ -1,4 +1,3 @@
-/* --- Variables de Diseño Corporativo --- */
 :root {
     /* Colores */
     --color-primary: #EB6250;
@@ -65,12 +64,13 @@ h4 {
 }
 
 .nav-container {
-    max-width: 1200px;
+    max-width: 1400px; /* Le damos aún más anchura máxima */
+    width: 100%;
     margin: 0 auto;
-    padding: 0 5%;
+    padding: 0 4%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 }
 
 .brand-logo {
@@ -79,28 +79,32 @@ h4 {
     color: var(--color-primary);
     text-decoration: none;
     font-weight: 700;
-    white-space: nowrap; /* Evita que salte de línea */
-    flex-shrink: 0;      /* Evita que los botones lo aplasten */
+    white-space: nowrap; 
+    flex-shrink: 0;      
+    margin-right: 40px; /* Separación del logo con el primer enlace */
 }
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 30px;
+    flex-grow: 1; /* Ocupa todo el espacio disponible a la derecha del logo */
 }
 
 .nav-links ul {
     list-style: none;
     display: flex;
-    gap: 25px;
+    gap: 30px;
+    /* MAGIA FLEXBOX: Esto empuja el buscador y los botones hacia la derecha del todo */
+    margin-right: auto; 
 }
 
 .nav-links a {
     text-decoration: none;
     color: var(--color-text-dark);
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 1rem;
     transition: color 0.3s ease;
+    white-space: nowrap !important; /* ¡Obligamos a que "El Centro" no se parta jamás! */
 }
 
 .nav-links a:hover {
@@ -110,7 +114,8 @@ h4 {
 .nav-controls {
     display: flex;
     gap: 12px;
-    flex-shrink: 0; /* Mantiene su tamaño original */
+    flex-shrink: 0; 
+    align-items: center;
 }
 
 .input-control {
@@ -121,19 +126,24 @@ h4 {
     font-size: 0.9rem;
     outline: none;
     background-color: var(--color-white);
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .input-control:focus {
     border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(235, 98, 80, 0.1);
+}
+
+#searchInput {
+    width: 220px; 
 }
 
 /* --- Área de Usuario --- */
 .user-actions {
-    margin-left: 15px;
+    margin-left: 20px;
     display: flex;
     align-items: center;
-    flex-shrink: 0; /* Mantiene su tamaño original */
+    flex-shrink: 0; 
 }
 
 .user-profile {
