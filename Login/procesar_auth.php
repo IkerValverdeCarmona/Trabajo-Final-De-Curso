@@ -1,19 +1,8 @@
 <?php
 session_start();
 
-$host = 'localhost';
-$dbname = 'LcQuiromasajes';
-$user = 'root';
-$pass = '';
-
-try {
-    // utf8mb4 es clave aquí para que lea la "ñ" correctamente
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-}
-catch (PDOException $e) {
-    die("Error de conexión: " . $e->getMessage());
-}
+// Cargamos la conexión centralizada
+require_once '../includes/db.php'; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $accion = $_POST['accion'] ?? '';
@@ -30,12 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $pdo->beginTransaction();
             
-            // Insertamos usando la columna "contraseña"
+            // 1. Insertamos en Perfil
             $stmt = $pdo->prepare("INSERT INTO Perfil (email, contraseña, permiso) VALUES (?, ?, 'usuario')");
             $stmt->execute([$email, $passwordHash]);
-
             $id_perfil = $pdo->lastInsertId();
-            $stmtUsuario = $pdo->prepare("INSERT INTO Usuario (id_perfil) VALUES (?)");
+
+            // 2. Insertamos en Usuario (CORREGIDO: Le pasamos un nombre por defecto para evitar el error de NOT NULL)
+            $stmtUsuario = $pdo->prepare("INSERT INTO Usuario (id_perfil, nombre) VALUES (?, 'Nuevo Cliente')");
             $stmtUsuario->execute([$id_perfil]);
 
             $pdo->commit();
@@ -56,18 +46,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             die("El email y la contraseña son obligatorios.");
         }
         try {
-            // Buscamos usando la columna "contraseña"
+            // Buscamos al usuario
             $stmt = $pdo->prepare("SELECT id_perfil, contraseña, permiso FROM Perfil WHERE email = ?");
             $stmt->execute([$email]);
             $perfil = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Verificamos el hash comparando con $perfil['contraseña']
+            // Verificamos el hash
             if ($perfil && password_verify($password_input, $perfil['contraseña'])) {
                 $_SESSION['id_perfil'] = $perfil['id_perfil'];
                 $_SESSION['permiso'] = $perfil['permiso'];
                 $_SESSION['email'] = $email;
 
-                header("Location: ../Front/pagina_principal/index.php");
+                // MEJORA PRO: Redirección inteligente según el rol
+                if ($perfil['permiso'] === 'admin') {
+                    header("Location: ../admin.php"); // Lidia va al panel
+                } else {
+                    header("Location: ../index.php"); // Los clientes van al inicio
+                }
                 exit;
             }
             else {

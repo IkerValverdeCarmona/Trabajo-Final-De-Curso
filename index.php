@@ -1,13 +1,56 @@
-<?php
-// Cambia lo que hay entre comillas por las contraseñas reales que quieres ponerles
-$pass_admin1 = "12345"; 
-$pass_admin2 = "admin_seguro";
-$pass_trabajadora = "lucia2024";
+<?php 
+session_start(); 
+$pdo->query("UPDATE Perfil SET contraseña = '" . password_hash('adminLidia123', PASSWORD_BCRYPT) . "' WHERE email = 'lidia@lcquiromasajes.com'");
+$pdo->query("UPDATE Perfil SET contraseña = '" . password_hash('adminIker123', PASSWORD_BCRYPT) . "' WHERE email = 'iker@lcquiromasajes.com'");
+$pdo->query("UPDATE Perfil SET contraseña = '" . password_hash('laura123', PASSWORD_BCRYPT) . "' WHERE email = 'laura_staff@lcquiromasajes.com'");
+$pdo->query("UPDATE Perfil SET contraseña = '" . password_hash('ana123', PASSWORD_BCRYPT) . "' WHERE email = 'ana@gmail.com'");
+die("<h1 style='color:green; padding:50px;'>¡Contraseñas arregladas! Borra este código del index.php y recarga.</h1>");
+require_once 'includes/db.php'; 
+include 'includes/header.php'; 
 
-echo "<h3>Hashes generados:</h3>";
-echo "<strong>Copia estos códigos largos y pégalos en tu base de datos:</strong><br><br>";
-
-echo "Admin 1: <br><code>" . password_hash($pass_admin1, PASSWORD_BCRYPT) . "</code><br><br>";
-echo "Admin 2: <br><code>" . password_hash($pass_admin2, PASSWORD_BCRYPT) . "</code><br><br>";
-echo "Trabajadora: <br><code>" . password_hash($pass_trabajadora, PASSWORD_BCRYPT) . "</code><br><br>";
+// Consultamos los servicios activos
+$stmt = $pdo->query("SELECT * FROM Servicios WHERE activo = 1");
+$servicios = $stmt->fetchAll();
 ?>
+
+<section class="hero-section" id="inicio">
+    <div class="hero-content">
+        <h1>Bienvenido a LC Quiromasajes</h1>
+        <p>Tu bienestar en manos profesionales. Especialistas en terapias manuales y recuperación corporal en Roquetas de Mar.</p>
+        <div class="hero-actions">
+            <a href="#servicios" class="btn btn-primary">Ver Tratamientos</a>
+            <a href="login/index.html" class="btn btn-secondary">Reservar Cita</a>
+        </div>
+    </div>
+</section>
+
+<section class="services-section" id="servicios">
+    <div class="section-header">
+        <h2>Nuestros Tratamientos</h2>
+        <p>Selecciona el masaje que mejor se adapte a tus necesidades</p>
+    </div>
+
+    <div class="services-grid">
+        <?php foreach ($servicios as $servicio): ?>
+            <div class="service-card">
+                <div>
+                    <h3><?php echo htmlspecialchars($servicio['nombre']); ?></h3>
+                    <p><?php echo htmlspecialchars($servicio['descripcion']); ?></p>
+                    <div style="margin-bottom: 20px;">
+                        <span style="display: block; font-weight: 600; color: #EB6250;">
+                            <?php echo $servicio['duracion_minutos']; ?> min
+                        </span>
+                        <span style="font-size: 1.5rem; font-weight: 700;">
+                            <?php echo number_format($servicio['precio_actual'], 2, ',', '.'); ?>€
+                        </span>
+                    </div>
+                </div>
+                <a href="reservar.php?id=<?php echo $servicio['id_servicio']; ?>" class="btn btn-outline-primary btn-sm">
+                    Reservar ahora
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</section>
+
+<?php include 'includes/footer.php'; ?>
