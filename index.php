@@ -1,10 +1,5 @@
 <?php 
 session_start(); 
-$pdo->query("UPDATE Perfil SET contraseña = '" . password_hash('adminLidia123', PASSWORD_BCRYPT) . "' WHERE email = 'lidia@lcquiromasajes.com'");
-$pdo->query("UPDATE Perfil SET contraseña = '" . password_hash('adminIker123', PASSWORD_BCRYPT) . "' WHERE email = 'iker@lcquiromasajes.com'");
-$pdo->query("UPDATE Perfil SET contraseña = '" . password_hash('laura123', PASSWORD_BCRYPT) . "' WHERE email = 'laura_staff@lcquiromasajes.com'");
-$pdo->query("UPDATE Perfil SET contraseña = '" . password_hash('ana123', PASSWORD_BCRYPT) . "' WHERE email = 'ana@gmail.com'");
-die("<h1 style='color:green; padding:50px;'>¡Contraseñas arregladas! Borra este código del index.php y recarga.</h1>");
 require_once 'includes/db.php'; 
 include 'includes/header.php'; 
 

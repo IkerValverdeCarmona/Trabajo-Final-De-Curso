@@ -102,6 +102,31 @@
                 </div>
             </nav>
         </div>
+        <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const userMenuBtn = document.getElementById("userMenuBtn");
+        const userDropdown = document.getElementById("userDropdown");
+
+        if (userMenuBtn && userDropdown) {
+            userMenuBtn.addEventListener("click", function(event) {
+                event.stopPropagation(); 
+                
+  
+                if (userDropdown.style.display === "none" || userDropdown.style.display === "") {
+                    userDropdown.style.display = "block";
+                } else {
+                    userDropdown.style.display = "none";
+                }
+            });
+
+            document.addEventListener("click", function(event) {
+                if (!userMenuBtn.contains(event.target) && !userDropdown.contains(event.target)) {
+                    userDropdown.style.display = "none";
+                }
+            });
+        }
+    });
+</script>
     </header>
     
     <main>
