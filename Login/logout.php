@@ -1,8 +1,7 @@
 <?php
 session_start();
-session_unset();
+$_SESSION = array();
 session_destroy();
-// RUTA ACTUALIZADA A LA PÁGINA PRINCIPAL
-header("Location: ../Front/pagina_principal/index.php");
+header("Location: ../index.php");
 exit;
 ?>
