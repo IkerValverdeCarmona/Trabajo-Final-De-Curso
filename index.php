@@ -13,7 +13,7 @@ $servicios = $stmt->fetchAll();
         <h1>Bienvenido a LC Quiromasajes</h1>
         <p>Tu bienestar en manos profesionales. Especialistas en terapias manuales y recuperación corporal en Roquetas de Mar.</p>
         <div class="hero-actions">
-            <a href="#servicios" class="btn btn-primary">Ver Tratamientos</a>
+            <a href="#servicios" class="btn btn-primary" id="btnReservarHero">Ver Tratamientos</a>
             <a href="login/index.html" class="btn btn-secondary">Reservar Cita</a>
         </div>
     </div>
@@ -47,5 +47,7 @@ $servicios = $stmt->fetchAll();
         <?php endforeach; ?>
     </div>
 </section>
+
+</main>
 
 <?php include 'includes/footer.php'; ?>
