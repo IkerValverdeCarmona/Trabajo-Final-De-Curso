@@ -18,7 +18,7 @@ Funcionalidades principales:
 ## 2) Stack tecnológico
 
 - **Backend:** PHP (PDO para acceso a datos).
-- **Base de datos:** MySQL / MariaDB.
+- **Base de datos:** MySQL
 - **Frontend:** HTML, CSS, JavaScript vanilla.
 - **Servidor recomendado en local:** XAMPP, WAMP o LAMP.
 
