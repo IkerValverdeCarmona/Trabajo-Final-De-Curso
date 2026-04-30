@@ -10,6 +10,13 @@ if (!isset($_SESSION['id_perfil'])) {
 
 $id_perfil = $_SESSION['id_perfil'];
 
+// Comprobar si hay mensaje de éxito desde reservar.php
+$mensaje_exito = "";
+if (isset($_SESSION['mensaje_exito'])) {
+    $mensaje_exito = $_SESSION['mensaje_exito'];
+    unset($_SESSION['mensaje_exito']); // Lo borramos para que no salga al recargar
+}
+
 try {
     // 2. Consulta SQL avanzada (JOINs) para sacar toda la info útil
     $sql = "SELECT c.id_cita, c.fecha_hora, c.estado, c.precio_final, 
@@ -38,12 +45,20 @@ include 'includes/header.php';
 </div>
 
 <main class="contenedor-principal" style="flex-direction: column; align-items: stretch; width: 100%; max-width: 800px; margin: 40px auto; padding: 0 20px; min-height: 40vh;">    
+    
+    <!-- Mostrar alerta de éxito si acaba de reservar -->
+    <?php if ($mensaje_exito): ?>
+        <div style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 15px; border-radius: 12px; margin-bottom: 30px; text-align: center; font-weight: 500;">
+            <?php echo $mensaje_exito; ?>
+        </div>
+    <?php endif; ?>
+
     <?php if (empty($citas)): ?>
         <div style="text-align: center; background: white; padding: 50px 20px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.05);">
             <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             <h3 style="color: #333; margin-bottom: 10px;">Aún no tienes citas</h3>
             <p style="color: #777; margin-bottom: 25px;">Anímate a reservar tu primer tratamiento con nosotros. ¡Tu cuerpo te lo agradecerá!</p>
-            <a href="index.php#servicios" class="btn btn-primary">Ver Tratamientos</a>
+            <a href="index.php#servicios" class="btn btn-primary" style="background-color: #EB6250; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600;">Ver Tratamientos</a>
         </div>
     <?php else: ?>
         
