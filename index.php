@@ -26,7 +26,9 @@ $servicios = $stmt->fetchAll();
     
     <div style="max-width: 400px; margin: 0 auto; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-card); background: #FFFFFF;">
         
-        <iframe src="https://youtube.com/shorts/6NZK6PnztMI?feature=share" 
+        <iframe src="https://www.youtube.com/shorts/6NZK6PnztMI" 
+                 title="LC Quiromasajes - Nuestra Historia" 
+                 allowfullscreen
                 width="100%" 
                 height="580" 
                 frameborder="0" 
