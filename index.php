@@ -18,25 +18,22 @@ $servicios = $stmt->fetchAll();
         </div>
     </div>
 </section>
-<section class="services-section" style="padding-top: 40px;">
+<section class="services-section" id="nosotros" style="padding-top: 40px; padding-bottom: 40px;">
     <div class="section-header">
         <h2>Conoce Nuestra Historia</h2>
-        <p>Años de experiencia dedicados a tu bienestar y salud integral.</p>
+        <p>Descubre los inicios de LcQuiromasajes y nuestra pasión por tu bienestar.</p>
     </div>
     
-    <div style="max-width: 400px; margin: 0 auto; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-card); background: #FFFFFF;">
+    <!-- Contenedor adaptado para formato vertical (Short) -->
+    <div style="max-width: 400px; margin: 0 auto; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-card); background: #000; position: relative; padding-bottom: 177.77%; height: 0;">
         
-        <iframe src="https://www.youtube.com/shorts/6NZK6PnztMI" 
-                 title="LC Quiromasajes - Nuestra Historia" 
-                 allowfullscreen
-                width="100%" 
-                height="580" 
-                frameborder="0" 
-                scrolling="no" 
-                allowtransparency="true" 
-                style="border:none; overflow:hidden;">
+        <iframe src="https://www.youtube-nocookie.com/embed/6NZK6PnztMI" 
+                title="Historia de LcQuiromasajes" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
         </iframe>
-
+        
     </div>
 </section>
 <section class="services-section" id="servicios">
