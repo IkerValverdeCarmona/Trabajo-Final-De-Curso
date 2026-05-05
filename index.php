@@ -18,12 +18,6 @@ $servicios = $stmt->fetchAll();
         </div>
     </div>
 </section>
-
-<section class="services-section" id="servicios">
-    <div class="section-header">
-        <h2>Nuestros Tratamientos</h2>
-        <p>Selecciona el masaje que mejor se adapte a tus necesidades</p>
-    </div>
 <section class="services-section" style="padding-top: 40px;">
     <div class="section-header">
         <h2>Conoce Nuestra Historia</h2>
@@ -32,7 +26,7 @@ $servicios = $stmt->fetchAll();
     
     <div style="max-width: 400px; margin: 0 auto; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-card); background: #FFFFFF;">
         
-        <iframe src="media/video_presentacion.mp4" 
+        <iframe src="https://youtube.com/shorts/6NZK6PnztMI?feature=share" 
                 width="100%" 
                 height="580" 
                 frameborder="0" 
@@ -43,6 +37,11 @@ $servicios = $stmt->fetchAll();
 
     </div>
 </section>
+<section class="services-section" id="servicios">
+    <div class="section-header">
+        <h2>Nuestros Tratamientos</h2>
+        <p>Selecciona el masaje que mejor se adapte a tus necesidades</p>
+    </div>
     <div class="services-grid">
         <?php foreach ($servicios as $servicio): ?>
             <div class="service-card">
