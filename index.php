@@ -14,7 +14,11 @@ $servicios = $stmt->fetchAll();
         <p>Tu bienestar en manos profesionales. Especialistas en terapias manuales y recuperación corporal en Roquetas de Mar.</p>
         <div class="hero-actions">
             <a href="#servicios" class="btn btn-primary" id="btnReservarHero">Ver Tratamientos</a>
-            <a href="login/index.html" class="btn btn-secondary">Reservar Cita</a>
+            <?php
+            // Decidimos el destino según si hay sesión iniciada
+            $destino_reserva = isset($_SESSION['id_perfil']) ? 'reservar.php' : 'login/index.html';
+            ?>
+<a href="<?= $destino_reserva ?>" class="btn btn-primary">Reservar Cita</a>
         </div>
     </div>
 </section>

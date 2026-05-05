@@ -14,7 +14,13 @@ $margen_limpieza = 5;
 
 // Funciones para calcular los huecos
 function obtenerHorasOcupadas($pdo, $id_trabajador, $fecha) {
-    $sql = "SELECT DATE_FORMAT(fecha_hora, '%H:%i') FROM Citas WHERE id_trabajador = ? AND DATE(fecha_hora) = ?";
+    // Añadimos la condición de estado para que las canceladas NO bloqueen el horario
+    $sql = "SELECT DATE_FORMAT(fecha_hora, '%H:%i') 
+            FROM Citas 
+            WHERE id_trabajador = ? 
+            AND DATE(fecha_hora) = ? 
+            AND estado != 'Cancelada'";
+            
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id_trabajador, $fecha]);
     return $stmt->fetchAll(PDO::FETCH_COLUMN);

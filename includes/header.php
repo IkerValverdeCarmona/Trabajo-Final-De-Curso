@@ -10,6 +10,7 @@
     <title>LC Quiromasajes | Centro de Terapias y Bienestar</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css?v=<?php echo time(); ?>">
 </head>
 <body>
