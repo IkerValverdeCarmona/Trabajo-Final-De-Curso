@@ -24,7 +24,25 @@ $servicios = $stmt->fetchAll();
         <h2>Nuestros Tratamientos</h2>
         <p>Selecciona el masaje que mejor se adapte a tus necesidades</p>
     </div>
+<section class="services-section" style="padding-top: 40px;">
+    <div class="section-header">
+        <h2>Conoce Nuestra Historia</h2>
+        <p>Años de experiencia dedicados a tu bienestar y salud integral.</p>
+    </div>
+    
+    <div style="max-width: 400px; margin: 0 auto; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-card); background: #FFFFFF;">
+        
+        <iframe src="https://www.instagram.com/reel/CzRbL2Ct01x/embed" 
+                width="100%" 
+                height="580" 
+                frameborder="0" 
+                scrolling="no" 
+                allowtransparency="true" 
+                style="border:none; overflow:hidden;">
+        </iframe>
 
+    </div>
+</section>
     <div class="services-grid">
         <?php foreach ($servicios as $servicio): ?>
             <div class="service-card">
