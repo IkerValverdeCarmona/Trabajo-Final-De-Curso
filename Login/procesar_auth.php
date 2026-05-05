@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$email, $passwordHash]);
             $id_perfil = $pdo->lastInsertId();
 
-            // 2. Insertamos en Usuario (CORREGIDO: Le pasamos un nombre por defecto para evitar el error de NOT NULL)
+            // 2. Insertamos en Usuario
             $stmtUsuario = $pdo->prepare("INSERT INTO Usuario (id_perfil, nombre) VALUES (?, 'Nuevo Cliente')");
             $stmtUsuario->execute([$id_perfil]);
 
@@ -57,11 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['permiso'] = $perfil['permiso'];
                 $_SESSION['email'] = $email;
 
-                // MEJORA PRO: Redirección inteligente según el rol
+                // Redirección inteligente según el rol
                 if ($perfil['permiso'] === 'admin') {
-                    header("Location: ../admin.php"); // Lidia va al panel
+                    header("Location: ../admin.php");
                 } else {
-                    header("Location: ../index.php"); // Los clientes van al inicio
+                    header("Location: ../index.php");
                 }
                 exit;
             }
