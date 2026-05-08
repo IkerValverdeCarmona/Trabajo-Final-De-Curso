@@ -29,7 +29,7 @@ try {
 }
 
 // 3. CORRECCIÓN DE RUTA: Salir para incluir el header
-include '../includes/header.php';
+include '/../includes/header.php';
 ?>
 
 <div style="padding: 40px 5%; max-width: 1400px; margin: 0 auto;">
