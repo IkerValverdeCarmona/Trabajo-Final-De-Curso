@@ -2,12 +2,12 @@
 session_start();
 require_once 'includes/db.php';
 
-if (!isset($_SESSION['id_perfil'])) {
-    header("Location: login/index.html");
+if (!isset($_SESSION['user_id'])) {
+    header("Location: auth/login.php");
     exit;
 }
 
-$id_perfil = $_SESSION['id_perfil'];
+$id_perfil = $_SESSION['user_id'];
 
 $mensaje_exito = "";
 if (isset($_SESSION['mensaje_exito'])) {
