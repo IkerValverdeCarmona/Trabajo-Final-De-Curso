@@ -36,10 +36,6 @@ include '../includes/header.php';
 <div style="padding: 40px 5%; max-width: 1400px; margin: 0 auto;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
         <h1 style="font-family: 'Playfair Display', serif;">Panel de Control</h1>
-        <div style="display: flex; gap: 10px;">
-            <button class="btn btn-outline-primary btn-sm">Nuevo Servicio</button>
-            <button class="btn btn-primary btn-sm">Descargar Informe</button>
-        </div>
     </div>
 
     <div class="card" style="padding: 0; overflow: hidden; border-radius: 20px; border: none; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);">
