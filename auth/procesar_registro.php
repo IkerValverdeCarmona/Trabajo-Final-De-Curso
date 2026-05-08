@@ -22,9 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Capturamos el ID autoincremental recién creado
         $id_perfil_nuevo = $pdo->lastInsertId();
         // Insertamos los datos personales en la tabla Usuario vinculando el ID
-        $sql_usuario = "INSERT INTO Usuario (id_perfil, nombre, apellidos, telefono) VALUES (?, ?, ?, ?)";
+        $sql_usuario = "INSERT INTO Usuario (id_perfil, nombre, apellido, telefono) VALUES (?, ?, ?, ?)";
         $stmt_usuario = $pdo->prepare($sql_usuario);
-        $stmt_usuario->execute([$id_perfil_nuevo, $nombre, $apellidos, $telefono]);
+        $stmt_usuario->execute([$id_perfil_nuevo, $nombre, $apellido, $telefono]);
         // Confirmamos los cambios en la base de datos
         $pdo->commit();
         // Redirigimos al login con un mensaje de éxito
