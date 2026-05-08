@@ -31,7 +31,8 @@ try {
 // 3. CORRECCIÓN DE RUTA: Salir para incluir el header
 include '../includes/header.php';
 ?>
-
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=<?php echo time(); ?>">
 <div style="padding: 40px 5%; max-width: 1400px; margin: 0 auto;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
         <h1 style="font-family: 'Playfair Display', serif;">Panel de Control</h1>
