@@ -8,13 +8,24 @@
     <title>LC Quiromasajes | Centro de Terapias y Bienestar</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="/assets/css/style.css?v=<?php echo time(); ?>">
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LC Quiromasajes | Centro de Terapias y Bienestar</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css?v=<?php echo time(); ?>">
 </head>
 <body>
     <header class="navbar" id="navbar">
         <div class="nav-container">
             
-            <a href="index.php" class="brand-logo">
+            <a href="<?php echo BASE_URL; ?>index.php" class="brand-logo">
                 LC Quiromasajes
             </a>
 
@@ -24,10 +35,10 @@
 
             <nav class="nav-links" id="navLinks">
                 <ul>
-                    <li><a href="index.php#inicio">Inicio</a></li>
-                    <li><a href="index.php#instalaciones">El Centro</a></li>
-                    <li><a href="index.php#servicios">Tratamientos</a></li>
-                    <li><a href="tienda.php">Productos</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>index.php#inicio">Inicio</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>index.php#instalaciones">El Centro</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>index.php#servicios">Tratamientos</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>tienda.php">Productos</a></li>
                 </ul>
                 
                 <div class="nav-controls">
@@ -41,8 +52,8 @@
                 <div class="user-actions">
                     <?php if (!isset($_SESSION['user_id'])): ?>
                         <div id="guestState" style="display: flex; gap: 10px; align-items: center;">
-                            <a href="auth/login.php" style="color: #EB6250; text-decoration: none; font-weight: 500;">Iniciar Sesión</a>
-                            <a href="auth/registro.php" class="main-btn" style="background-color: #EB6250; color: white; padding: 8px 20px; border-radius: 50px; text-decoration: none;">Registrarse</a>
+                            <a href="<?php echo BASE_URL; ?>auth/login.php" style="color: #EB6250; text-decoration: none; font-weight: 500;">Iniciar Sesión</a>
+                            <a href="<?php echo BASE_URL; ?>auth/registro.php" class="main-btn" style="background-color: #EB6250; color: white; padding: 8px 20px; border-radius: 50px; text-decoration: none;">Registrarse</a>
                         </div>
                     
                     <?php else: ?>
@@ -59,15 +70,15 @@
                                     <p class="text-muted" style="margin: 0;">Mi Cuenta</p>
                                 </div>
                                 <hr>
-                                <a href="mis_citas.php">Mis Citas</a>
-                                <a href="perfil.php">Mi Perfil</a> 
+                                <a href="<?php echo BASE_URL; ?>mis_citas.php">Mis Citas</a>
+                                <a href="<?php echo BASE_URL; ?>perfil.php">Mi Perfil</a> 
                                 
                                 <?php if(isset($_SESSION['rol']) && ($_SESSION['rol'] === 'admin' || $_SESSION['rol'] === 'trabajador')): ?>
-                                    <a href="admin/admin.php">Panel Admin</a>
+                                    <a href="<?php echo BASE_URL; ?>admin/admin.php">Panel Admin</a>
                                 <?php endif; ?>
                                 
                                 <hr>
-                                <a href="auth/logout.php" class="text-danger" style="color: #D75443;">Cerrar Sesión</a>
+                                <a href="<?php echo BASE_URL; ?>auth/logout.php" class="text-danger" style="color: #D75443;">Cerrar Sesion</a>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -75,5 +86,4 @@
             </nav>
         </div>
     </header>
-    
     <main>
