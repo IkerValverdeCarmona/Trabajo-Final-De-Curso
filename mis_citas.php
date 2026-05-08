@@ -82,7 +82,7 @@ include 'includes/header.php';
 </style>
 
 <div style="background: linear-gradient(135deg, #FFF7EE 0%, #FDF2D8 100%); padding: 70px 20px; text-align: center; border-bottom: 1px solid rgba(235, 98, 80, 0.1);">
-    <h1 style="font-family: 'Playfair Display', serif; color: #EB6250; font-size: 2.8rem; margin-bottom: 10px;">Tu Diario de Bienestar</h1>
+    <h1 style="font-family: 'Playfair Display', serif; color: #EB6250; font-size: 2.8rem; margin-bottom: 10px;">Tus Citas</h1>
     <p style="color: #886752; max-width: 600px; margin: 0 auto; font-size: 1.1rem; opacity: 0.9;">Revisa tus momentos de relax y gestiona tus citas en LC Quiromasajes.</p>
 </div>
 
@@ -141,13 +141,13 @@ include 'includes/header.php';
                             
                             <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 15px; color: #666; font-size: 0.95rem;">
                                 <div style="display: flex; align-items: center; gap: 6px;">
-                                    <span>👤</span> <strong><?php echo htmlspecialchars($cita['especialista'] ?? 'Staff LcQuiromasajes'); ?></strong>
+                                    <span>👤</span> <strong><?php echo htmlspecialchars($cita['especialista'] ?? 'LcQuiromasajes'); ?></strong>
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 6px;">
-                                    <span>⏱️</span> <?php echo $cita['duracion_minutos']; ?> min
+                                    <span>🕛</span> <?php echo $cita['duracion_minutos']; ?> min
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 6px;">
-                                    <span>📍</span> Roquetas de Mar
+                                    <span>📍</span> Calle María Guerrero Nº1, 04740 Roquetas de Mar, Almería, Spain
                                 </div>
                             </div>
                         </div>
