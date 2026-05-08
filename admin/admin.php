@@ -22,8 +22,10 @@ try {
 
     $citas = $pdo->query($sql)->fetchAll();
 } catch (PDOException $e) {
-    // Si la tabla está vacía o hay error, evitamos que la página explote
-    $citas = [];
+     // Si hay error, lo mostramos (en producción deberíamos loguearlo en vez de mostrarlo)
+     error_log("Error al consultar citas: " . $e->getMessage());
+     $error = "No se pudieron cargar las citas. Inténtalo de nuevo más tarde.";
+     $citas = [];
 }
 
 // 3. CORRECCIÓN DE RUTA: Salir para incluir el header
@@ -42,40 +44,60 @@ include '../includes/header.php';
     <div class="card" style="padding: 0; overflow: hidden; border-radius: 20px; border: none; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);">
         <table style="width: 100%; border-collapse: collapse; text-align: left;">
             <thead style="background-color: #FFF7EE;">
-                <tr>
-                    <th style="padding: 20px;">Fecha y Hora</th>
-                    <th style="padding: 20px;">Cliente</th>
-                    <th style="padding: 20px;">Servicio</th>
-                    <th style="padding: 20px;">Especialista</th>
-                    <th style="padding: 20px;">Estado</th>
-                    <th style="padding: 20px;">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (empty($citas)): ?>
-                    <tr>
-                        <td colspan="6" style="padding: 40px; text-align: center; color: #666;">No hay citas registradas actualmente.</td>
-                    </tr>
-                <?php else: ?>
-                    <?php foreach ($citas as $cita): ?>
-                        <tr style="border-bottom: 1px solid #f0f0f0;">
-                            <td style="padding: 15px 20px;"><?php echo date('d/m/Y H:i', strtotime($cita['fecha_hora'])); ?></td>
-                            <td style="padding: 15px 20px; font-weight: 500;"><?php echo htmlspecialchars($cita['cliente']); ?></td>
-                            <td style="padding: 15px 20px;"><?php echo htmlspecialchars($cita['servicio']); ?></td>
-                            <td style="padding: 15px 20px;"><?php echo htmlspecialchars($cita['especialista'] ?? 'Sin asignar'); ?></td>
-                            <td style="padding: 15px 20px;">
-                                <span style="padding: 5px 12px; border-radius: 50px; font-size: 0.85rem; 
-                                           background: <?php echo $cita['estado'] === 'Completado' ? '#e6f4ea' : '#fff4e5'; ?>;
-                                           color: <?php echo $cita['estado'] === 'Completado' ? '#1e7e34' : '#b7791f'; ?>;">
-                                    <?php echo htmlspecialchars($cita['estado']); ?>
-                                </span>
-                            </td>
-                            <td style="padding: 15px 20px; font-weight: 700;"><?php echo $cita['precio_final']; ?>€</td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </tbody>
-        </table>
+    <tr>
+        <th style="padding: 20px;">Fecha y Hora</th>
+        <th style="padding: 20px;">Cliente</th>
+        <th style="padding: 20px;">Servicio</th>
+        <th style="padding: 20px;">Especialista</th>
+        <th style="padding: 20px;">Estado</th>
+        <th style="padding: 20px;">Total</th>
+        <th style="padding: 20px;">Acciones</th> </tr>
+</thead>
+<tbody>
+    <?php if (empty($citas)): ?>
+        <tr>
+            <td colspan="7" style="padding: 40px; text-align: center; color: #666;">No hay citas registradas.</td>
+        </tr>
+    <?php else: ?>
+        <?php foreach ($citas as $cita): ?>
+            <tr style="border-bottom: 1px solid #f0f0f0;">
+                <td style="padding: 15px 20px;"><?php echo date('d/m/Y H:i', strtotime($cita['fecha_hora'])); ?></td>
+                <td style="padding: 15px 20px; font-weight: 500;"><?php echo htmlspecialchars($cita['cliente']); ?></td>
+                <td style="padding: 15px 20px;"><?php echo htmlspecialchars($cita['servicio']); ?></td>
+                <td style="padding: 15px 20px;"><?php echo htmlspecialchars($cita['especialista'] ?? 'Sin asignar'); ?></td>
+                <td style="padding: 15px 20px;">
+                    <span style="padding: 5px 12px; border-radius: 50px; font-size: 0.85rem; 
+                               background: <?php echo $cita['estado'] === 'Completado' ? '#e6f4ea' : ($cita['estado'] === 'Cancelado' ? '#ffebee' : '#fff4e5'); ?>;
+                               color: <?php echo $cita['estado'] === 'Completado' ? '#1e7e34' : ($cita['estado'] === 'Cancelado' ? '#c62828' : '#b7791f'); ?>;">
+                        <?php echo htmlspecialchars($cita['estado']); ?>
+                    </span>
+                </td>
+                <td style="padding: 15px 20px; font-weight: 700;"><?php echo $cita['precio_final']; ?>€</td>
+                
+                <td style="padding: 15px 20px;">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <form action="gestionar_cita.php" method="POST" style="margin: 0;">
+                            <input type="hidden" name="id_cita" value="<?php echo $cita['id_cita']; ?>">
+                            <select name="nuevo_estado" onchange="this.form.submit()" style="padding: 5px; border-radius: 8px; border: 1px solid #ddd; font-size: 0.8rem; cursor: pointer;">
+                                <option value="" disabled selected>Estado...</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Completado">Completado</option>
+                                <option value="Cancelado">Cancelado</option>
+                            </select>
+                        </form>
+                        
+                        <a href="eliminar_cita.php?id=<?php echo $cita['id_cita']; ?>" 
+                           onclick="return confirm('¿Estás seguro de que deseas eliminar esta cita permanentemente?')"
+                           style="text-decoration: none; font-size: 1.1rem;" title="Eliminar cita">
+                           🗑️
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</tbody>        
+</table>
     </div>
 </div>
 
