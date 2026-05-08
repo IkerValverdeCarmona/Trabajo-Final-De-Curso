@@ -82,12 +82,6 @@ include '../includes/header.php';
                                 <option value="Cancelado">Cancelado</option>
                             </select>
                         </form>
-                        
-                        <a href="eliminar_cita.php?id=<?php echo $cita['id_cita']; ?>" 
-                           onclick="return confirm('¿Estás seguro de que deseas eliminar esta cita permanentemente?')"
-                           style="text-decoration: none; font-size: 1.1rem;" title="Eliminar cita">
-                           🗑️
-                        </a>
                     </div>
                 </td>
             </tr>

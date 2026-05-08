@@ -3,8 +3,8 @@ session_start();
 require_once 'includes/db.php';
 
 // 1. SEGURIDAD: Solo usuarios logueados pueden reservar
-if (!isset($_SESSION['id_perfil'])) {
-    header("Location: login/index.html");
+if (!isset($_SESSION['user_id'])) {
+    header("Location: auth/login.php");
     exit;
 }
 $id_perfil_actual = $_SESSION['id_perfil'];

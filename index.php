@@ -14,7 +14,7 @@ $servicios = $stmt->fetchAll();
             <a href="#servicios" class="btn btn-primary" id="btnReservarHero">Ver Tratamientos</a>
             <?php
             // Decidimos el destino según si hay sesión iniciada
-            $destino_reserva = isset($_SESSION['id_perfil']) ? 'reservar.php' : 'login/index.html';
+            $destino_reserva = isset($_SESSION['user_id']) ? 'reservar.php' : 'auth/login.php';
             ?>
             <a href="<?= $destino_reserva ?>" class="btn btn-primary">Reservar Cita</a>
         </div>
