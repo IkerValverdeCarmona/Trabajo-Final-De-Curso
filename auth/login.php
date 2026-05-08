@@ -40,7 +40,7 @@
             <div style="margin-top: 20px; text-align: center;">
                 <p style="color: #666; font-size: 0.9rem;">O también puedes</p>
                 <a href="<?php echo $google_login_url; ?>" style="display: flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid #ddd; padding: 10px; border-radius: 50px; text-decoration: none; color: #333; font-weight: 500;">
-                    <img src="https://imgs.search.brave.com/k2-S1pIsJJWeoDgoAUhsAtERnbHDVnxX8Bvunk641Z8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNjAv/MzAxLzkyMC9zbWFs/bC9nb29nbGUtbG9n/by1vbi1idXR0b24t/ZnJlZS1wbmcucG5n" width="20">
+                    <img src="https://imgs.search.brave.com/k2-S1pIsJJWeoDgoAUhsAtERnbHDVnxX8Bvunk641Z8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNjAv/MzAxLzkyMC9zbWFs/bC9nb29nbGUtbG9n/by1vbi1idXR0b24t/ZnJlZS1wbmcucG5n" width="50" alt="Google Logo">
                     Continuar con Google
                 </a>
             </div>
