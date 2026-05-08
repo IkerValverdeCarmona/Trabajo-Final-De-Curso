@@ -30,13 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Redirigimos al login con un mensaje de éxito
         header("Location: login.php?mensaje=registro_exito");
         exit();
-    } catch (PDOException $e) {
-        // Si hay error (ej: correo duplicado), deshacemos todo
-        $pdo->rollBack();
-        // Redirigimos con error genérico para que no se rompa la vista
-        header("Location: registro.php?error=db");
-        exit();
-    }
+    }  catch (PDOException $e) {
+    $pdo->rollBack();
+    // CAMBIA LA LÍNEA DE ABAJO POR ESTA:
+    die("Error en la base de datos: " . $e->getMessage()); 
+}
 } else {
     // Si alguien intenta entrar a este archivo directamente por URL, no lo dejamos entrar y lo mandamos al registro
     header("Location: registro.php");
