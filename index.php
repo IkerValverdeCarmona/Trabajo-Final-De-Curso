@@ -1,9 +1,7 @@
 <?php 
 session_start(); 
 require_once 'includes/db.php'; 
-include 'includes/header.php'; 
-
-// Consultamos los servicios activos
+require_once 'includes/header.php';
 $stmt = $pdo->query("SELECT * FROM Servicios WHERE activo = 1");
 $servicios = $stmt->fetchAll();
 ?>
@@ -18,7 +16,7 @@ $servicios = $stmt->fetchAll();
             // Decidimos el destino según si hay sesión iniciada
             $destino_reserva = isset($_SESSION['id_perfil']) ? 'reservar.php' : 'login/index.html';
             ?>
-<a href="<?= $destino_reserva ?>" class="btn btn-primary">Reservar Cita</a>
+            <a href="<?= $destino_reserva ?>" class="btn btn-primary">Reservar Cita</a>
         </div>
     </div>
 </section>
@@ -27,7 +25,6 @@ $servicios = $stmt->fetchAll();
         <h2 style="font-family: 'Playfair Display', serif; color: #EB6250;">Conoce Nuestra Historia</h2>
         <p style="font-family: 'Poppins', sans-serif;">Descubre los inicios de LcQuiromasajes y nuestra pasión por tu bienestar.</p>
     </div>
-    
     <div style="width: 90%; max-width: 350px; margin: 0 auto;">
         <div style="position: relative; padding-bottom: 177.78%; height: 0; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05); background-color: #000;">
             <iframe 
@@ -36,8 +33,7 @@ $servicios = $stmt->fetchAll();
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                 allowfullscreen>
-            </iframe>
-            
+            </iframe>        
         </div>
     </div>
 </section>
@@ -68,7 +64,5 @@ $servicios = $stmt->fetchAll();
         <?php endforeach; ?>
     </div>
 </section>
-
 </main>
-
 <?php include 'includes/footer.php'; ?>

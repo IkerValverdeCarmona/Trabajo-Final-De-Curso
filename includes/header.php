@@ -1,6 +1,4 @@
 <?php
-// includes/header.php
-// Nota: session_start() y require_once 'db.php' deben ir EN EL ARCHIVO PRINCIPAL antes de llamar a este header.
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -10,7 +8,6 @@
     <title>LC Quiromasajes | Centro de Terapias y Bienestar</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css?v=<?php echo time(); ?>">
 </head>
 <body>
@@ -28,46 +25,49 @@
             <nav class="nav-links" id="navLinks">
                 <ul>
                     <li><a href="index.php#inicio">Inicio</a></li>
-                    <li><a href="index.php#servicios">Tratamientos</a></li>
                     <li><a href="index.php#instalaciones">El Centro</a></li>
+                    <li><a href="index.php#servicios">Tratamientos</a></li>
+                    <li><a href="tienda.php">Productos</a></li>
                 </ul>
                 
                 <div class="nav-controls">
-                    <input type="text" placeholder="Buscar terapia..." class="input-radius" id="searchInput">
-                    <select class="input-radius" id="languageSelect">
+                    <input type="text" placeholder="Buscar terapia..." class="input-radius" id="searchInput" style="border-radius: 12px;">
+                    <select class="input-radius" id="languageSelect" style="border-radius: 12px;">
                         <option value="es">ES</option>
                         <option value="en">EN</option>
                     </select>
                 </div>
 
                 <div class="user-actions">
-                    <?php if (!isset($_SESSION['id_perfil'])): ?>
+                    <?php if (!isset($_SESSION['user_id'])): ?>
                         <div id="guestState" style="display: flex; gap: 10px; align-items: center;">
-                            <a href="login/index.html" style="color: var(--color-primary); text-decoration: none; font-weight: 500;">Iniciar Sesión</a>
-                            <a href="login/index.html?action=register" class="main-btn">Registrarse</a>
+                            <a href="auth/login.php" style="color: #EB6250; text-decoration: none; font-weight: 500;">Iniciar Sesión</a>
+                            <a href="auth/registro.php" class="main-btn" style="background-color: #EB6250; color: white; padding: 8px 20px; border-radius: 50px; text-decoration: none;">Registrarse</a>
                         </div>
                     
                     <?php else: ?>
                         <div id="loggedState" class="user-profile">
-                            <div class="user-trigger" id="userMenuBtn">
-                                <div class="avatar">
-                                    <?php echo strtoupper(substr($_SESSION['email'], 0, 1)); ?>
+                            <div class="user-trigger" id="userMenuBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                <div class="avatar" style="background-color: #EB6250; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                    <?php echo strtoupper(substr($_SESSION['nombre_real'], 0, 1)); ?>
                                 </div>
-                                <span class="user-name">Mi Cuenta</span>
+                                <span class="user-name">Hola, <?php echo htmlspecialchars($_SESSION['nombre_real']); ?></span>
                             </div>
 
                             <div class="dropdown-menu" id="userDropdown">
                                 <div class="dropdown-header">
-                                    <p class="text-muted" style="margin: 0; word-break: break-all;"><?php echo htmlspecialchars($_SESSION['email']); ?></p>
+                                    <p class="text-muted" style="margin: 0;">Mi Cuenta</p>
                                 </div>
                                 <hr>
                                 <a href="mis_citas.php">Mis Citas</a>
                                 <a href="perfil.php">Mi Perfil</a> 
-                                <?php if(isset($_SESSION['permiso']) && $_SESSION['permiso'] === 'admin'): ?>
-                                    <a href="admin.php">Panel Admin</a>
+                                
+                                <?php if(isset($_SESSION['rol']) && ($_SESSION['rol'] === 'admin' || $_SESSION['rol'] === 'trabajador')): ?>
+                                    <a href="admin/admin.php">Panel Admin</a>
                                 <?php endif; ?>
+                                
                                 <hr>
-                                <a href="login/logout.php" class="text-danger">Cerrar Sesión</a>
+                                <a href="auth/logout.php" class="text-danger" style="color: #D75443;">Cerrar Sesión</a>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -77,4 +77,3 @@
     </header>
     
     <main>
-        
