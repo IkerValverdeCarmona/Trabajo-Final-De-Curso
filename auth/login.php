@@ -32,8 +32,21 @@
             <input type="password" name="password" placeholder="Tu contraseña" required>
             <button type="submit">Entrar</button>
         </form>
+        <?php 
+            require_once '../includes/google_config.php'; 
+            $google_login_url = $client->createAuthUrl();
+            ?>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <p style="color: #666; font-size: 0.9rem;">O también puedes</p>
+                <a href="<?php echo $google_login_url; ?>" style="display: flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid #ddd; padding: 10px; border-radius: 50px; text-decoration: none; color: #333; font-weight: 500;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="20">
+                    Continuar con Google
+                </a>
+            </div>
         <a href="registro.php" class="link-footer">¿No tienes cuenta? Registrate aquí</a>
         <a href="../index.php" class="link-footer" style="margin-top: 10px; font-size: 12px;">← Volver al inicio</a>
     </div>
+    
 </body>
 </html>
