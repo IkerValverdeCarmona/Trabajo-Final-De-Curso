@@ -141,7 +141,6 @@ if (isset($_SESSION['carrito'])) {
             <nav class="nav-center">
                 <ul class="nav-links-list">
                     <li><a href="<?php echo BASE_URL; ?>index.php#inicio">Inicio</a></li>
-                    <li><a href="<?php echo BASE_URL; ?>index.php#instalaciones">El Centro</a></li>
                     <li><a href="<?php echo BASE_URL; ?>index.php#servicios">Tratamientos</a></li>
                     <li><a href="<?php echo BASE_URL; ?>tienda/index.php">Productos</a></li>
                 </ul>
