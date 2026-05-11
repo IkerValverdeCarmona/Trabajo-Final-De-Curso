@@ -4,7 +4,7 @@ if (!defined('BASE_URL')) {
     define('BASE_URL', '/'); 
 }
 
-// 2. Calcular cuántos productos hay en el carrito para el globo del menú
+// 2. Calcular cuántos productos hay en el carrito
 $cantidad_carrito_header = 0;
 if (isset($_SESSION['carrito'])) {
     $cantidad_carrito_header = array_sum(array_column($_SESSION['carrito'], 'cantidad'));
@@ -26,7 +26,6 @@ if (isset($_SESSION['carrito'])) {
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css?v=<?php echo time(); ?>">
 
     <style>
-        /* Estilos específicos del header para Carrito y Menú de Usuario */
         .cart-icon-container {
             position: relative;
             display: flex;
@@ -61,7 +60,7 @@ if (isset($_SESSION['carrito'])) {
             border-radius: 15px;
             min-width: 220px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            display: none; /* Oculto por defecto */
+            display: none;
             z-index: 9999;
             border: 1px solid #f0f0f0;
             padding: 10px 0;
@@ -69,7 +68,7 @@ if (isset($_SESSION['carrito'])) {
         }
 
         .dropdown-menu-custom.show {
-            display: block; /* Se muestra con JS */
+            display: block;
         }
 
         .dropdown-menu-custom a {
@@ -110,14 +109,6 @@ if (isset($_SESSION['carrito'])) {
                     <li><a href="<?php echo BASE_URL; ?>index.php#servicios" style="text-decoration: none; color: #333; font-weight: 500;">Tratamientos</a></li>
                     <li><a href="<?php echo BASE_URL; ?>tienda/index.php" style="text-decoration: none; color: #333; font-weight: 500;">Productos</a></li>
                 </ul>
-                
-                <div class="nav-controls" style="display: flex; gap: 10px;">
-                    <input type="text" placeholder="Buscar terapia..." class="input-radius" id="searchInput" style="border-radius: 12px; padding: 8px 15px; border: 1px solid #ddd; font-family: 'Poppins', sans-serif;">
-                    <select class="input-radius" id="languageSelect" style="border-radius: 12px; padding: 8px; border: 1px solid #ddd; font-family: 'Poppins', sans-serif;">
-                        <option value="es">ES</option>
-                        <option value="en">EN</option>
-                    </select>
-                </div>
 
                 <div class="user-actions" style="display: flex; align-items: center;">
                     
@@ -133,7 +124,6 @@ if (isset($_SESSION['carrito'])) {
                             <a href="<?php echo BASE_URL; ?>auth/login.php" style="color: #EB6250; text-decoration: none; font-weight: 500;">Iniciar Sesión</a>
                             <a href="<?php echo BASE_URL; ?>auth/registro.php" class="main-btn" style="background-color: #EB6250; color: white; padding: 8px 20px; border-radius: 50px; text-decoration: none; font-weight: 600;">Registrarse</a>
                         </div>
-                    
                     <?php else: ?>
                         <div id="loggedState" class="user-profile" style="position: relative;">
                             
@@ -154,6 +144,7 @@ if (isset($_SESSION['carrito'])) {
                                 <hr style="margin: 5px 0; border: 0; border-top: 1px solid #eee;">
                                 
                                 <a href="<?php echo BASE_URL; ?>mis_citas.php">📅 Mis Citas</a>
+                                <a href="<?php echo BASE_URL; ?>mis_pedidos.php">🛍️ Mis Pedidos</a>
                                 <a href="<?php echo BASE_URL; ?>perfil.php">👤 Mi Perfil</a> 
                                 
                                 <?php if(isset($_SESSION['rol']) && ($_SESSION['rol'] === 'admin' || $_SESSION['rol'] === 'trabajador')): ?>
@@ -176,7 +167,6 @@ if (isset($_SESSION['carrito'])) {
                                         menu.classList.toggle('show');
                                     });
 
-                                    // Cerrar el menú si se hace clic fuera de él
                                     document.addEventListener('click', function(e) {
                                         if (!menu.contains(e.target) && !btn.contains(e.target)) {
                                             menu.classList.remove('show');
