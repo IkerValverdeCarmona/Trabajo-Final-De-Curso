@@ -11,18 +11,22 @@ if (!isset($_SESSION['rol']) || ($_SESSION['rol'] !== 'admin' && $_SESSION['rol'
 }
 
 // Consultamos las citas con JOINs
+// Consultamos las citas usando subconsultas en lugar de JOINs
 try {
-    $sql = "SELECT c.id_cita, c.fecha_hora, c.estado, c.precio_final, 
-                   u.nombre as cliente, s.nombre as servicio, t.nombre as especialista
-            FROM Citas c
-            JOIN Usuario u ON c.id_perfil = u.id_perfil
-            JOIN Servicios s ON c.id_servicio = s.id_servicio
-            LEFT JOIN Trabajadores t ON c.id_trabajador = t.id_trabajador
-            ORDER BY c.fecha_hora DESC";
+    $sql = "SELECT 
+                id_cita, 
+                fecha_hora, 
+                estado, 
+                precio_final,
+                (SELECT nombre FROM Usuario WHERE id_perfil = Citas.id_perfil) AS cliente,
+                (SELECT nombre FROM Servicios WHERE id_servicio = Citas.id_servicio) AS servicio,
+                (SELECT nombre FROM Trabajadores WHERE id_trabajador = Citas.id_trabajador) AS especialista
+            FROM Citas
+            ORDER BY fecha_hora DESC";
 
     $citas = $pdo->query($sql)->fetchAll();
 } catch (PDOException $e) {
-     // Si hay error, lo mostramos (en producción deberíamos loguearlo en vez de mostrarlo)
+     // Si hay error, lo mostramos
      error_log("Error al consultar citas: " . $e->getMessage());
      $error = "No se pudieron cargar las citas. Inténtalo de nuevo más tarde.";
      $citas = [];
