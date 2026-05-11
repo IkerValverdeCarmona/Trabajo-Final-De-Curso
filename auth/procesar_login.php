@@ -3,8 +3,9 @@ session_start();
 require_once '../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // CORRECCIÓN: El nombre en el formulario es 'password', no 'contraseña'
     $email = trim($_POST['email']);
-    $password = $_POST['contraseña'];
+    $password = $_POST['password']; 
 
     try {
         // 1. Buscamos el correo en Perfil
@@ -12,11 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$email]);
         $perfil = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Si existe el usuario y la contraseña es correcta (usando tu campo 'contraseña')
+        // Verificamos si existe el usuario y la contraseña (usando tu campo de BD 'contraseña')
         if ($perfil && password_verify($password, $perfil['contraseña'])) {
             
             $id_perfil = $perfil['id_perfil'];
-            $rol = $perfil['permiso']; // Usando tu campo 'permiso'
+            $rol = $perfil['permiso']; 
             $nombre_real = "Usuario";
 
             // 2. Buscamos el nombre según el rol
@@ -44,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['rol'] = $rol;
             $_SESSION['nombre_real'] = $nombre_real;
 
-            // --- NUEVO: RECUPERAR EL CARRITO DE LA BASE DE DATOS ---
+            // --- RECUPERAR EL CARRITO DE LA BASE DE DATOS ---
             try {
                 $stmt_cart = $pdo->prepare("SELECT id_producto, cantidad FROM Carrito WHERE id_perfil = ?");
                 $stmt_cart->execute([$id_perfil]);
@@ -54,21 +55,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (!isset($_SESSION['carrito'])) {
                         $_SESSION['carrito'] = [];
                     }
-
                     foreach ($items_guardados as $item) {
-                        $id_p = $item['id_producto'];
-                        $_SESSION['carrito'][$id_p] = [
-                            'cantidad' => $item['cantidad']
-                        ];
+                        $_SESSION['carrito'][$item['id_producto']] = ['cantidad' => $item['cantidad']];
                     }
-
-                    // Limpiamos la tabla para que no se dupliquen la próxima vez
+                    // Limpiamos la tabla después de recuperar
                     $pdo->prepare("DELETE FROM Carrito WHERE id_perfil = ?")->execute([$id_perfil]);
                 }
             } catch (PDOException $e_cart) {
-                // Si falla el carrito (p.ej. no existe la tabla todavía), el login sigue funcionando
+                // Si falla el carrito, no bloqueamos el login
             }
-            // -------------------------------------------------------
 
             // 4. Redirección inteligente
             if ($rol === 'admin' || $rol === 'trabajador') {
@@ -79,14 +74,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
 
         } else {
-            // Si falla la contraseña o el correo
-            header("Location: ../login.php?error=1");
+            // ERROR: Volvemos a login.php (está en la misma carpeta)
+            header("Location: login.php?error=1");
             exit();
         }
 
     } catch (PDOException $e) {
-        echo "Error crítico: " . $e->getMessage();
-        exit();
+        die("Error crítico: " . $e->getMessage());
     }
+} else {
+    header("Location: login.php");
+    exit();
 }
-?>
