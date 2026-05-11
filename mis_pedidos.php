@@ -7,13 +7,14 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $id_perfil = $_SESSION['user_id'];
+// Consultar el historial de pedidos del usuario SIN usar JOIN (con subconsultas)
 try {
+    // Hemos quitado la columna 'notas' por si era la que daba error
     $sql = "SELECT 
                 id_producto,
                 fecha_compra,
                 cantidad,
                 precio_unitario_venta,
-                notas,
                 (SELECT nombre FROM Producto WHERE id_producto = Opera.id_producto) AS nombre_producto
             FROM Opera 
             WHERE id_perfil = ? 
@@ -24,7 +25,8 @@ try {
     $pedidos = $stmt->fetchAll();
     
 } catch (PDOException $e) {
-    die("Error al cargar el historial de pedidos.");
+    // AHORA SÍ: Si falla, nos va a chivar el error exacto de la base de datos
+    die("Error crítico en la base de datos: " . $e->getMessage());
 }
 
 include 'includes/header.php';
