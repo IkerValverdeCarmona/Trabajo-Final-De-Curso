@@ -12,7 +12,7 @@ $password_encriptada = password_hash($nueva_password, PASSWORD_DEFAULT);
 
 try {
     // Actualizamos el Perfil de Marta con la contraseña encriptada
-    $stmt = $pdo->prepare("UPDATE Perfil SET password = ? WHERE email = ?");
+    $stmt = $pdo->prepare("UPDATE Perfil SET contraseña = ? WHERE email = ?");
     $stmt->execute([$password_encriptada, $email_marta]);
     
     // Verificamos si realmente se cambió algo
