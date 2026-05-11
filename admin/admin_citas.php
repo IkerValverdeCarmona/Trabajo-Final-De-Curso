@@ -1,32 +1,37 @@
 <?php
 session_start();
 
-// 1. CORRECCIÓN DE RUTA: Salir de la carpeta admin para encontrar includes
-require_once '../includes/db.php'; 
-
-// 2. CORRECCIÓN DE SEGURIDAD: Usar la variable de sesión 'rol' que definimos en el login
-if (!isset($_SESSION['rol']) || ($_SESSION['rol'] !== 'admin' && $_SESSION['rol'] !== 'trabajador')) {
-    header("Location: ../index.php");
-    exit;
-}
+// 1. Obtener datos del usuario conectado
+$rol_actual = $_SESSION['rol'];
+$id_perfil_actual = $_SESSION['user_id'];
 try {
+    // Definimos la base de la consulta
     $sql = "SELECT 
-                id_cita, 
-                fecha_hora, 
-                estado, 
-                precio_final,
+                id_cita, fecha_hora, estado, precio_final,
                 (SELECT nombre FROM Usuario WHERE id_perfil = Citas.id_perfil) AS cliente,
                 (SELECT nombre FROM Servicios WHERE id_servicio = Citas.id_servicio) AS servicio,
                 (SELECT nombre FROM Trabajadores WHERE id_trabajador = Citas.id_trabajador) AS especialista
-            FROM Citas
-            ORDER BY fecha_hora DESC";
+            FROM Citas";
 
-    $citas = $pdo->query($sql)->fetchAll();
+    // 2. APLICAR FILTRO SEGÚN ROL
+    if ($rol_actual === 'trabajador') {
+        // Buscamos las citas donde el trabajador sea el que está logueado
+        // Nota: Asumimos que en la tabla Trabajadores tienes el id_perfil para vincularlos
+        $sql .= " WHERE id_trabajador = (SELECT id_trabajador FROM Trabajadores WHERE id_perfil = ?)";
+        $sql .= " ORDER BY fecha_hora DESC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id_perfil_actual]);
+    } else {
+        // Si es admin (Iker), ve todas las citas
+        $sql .= " ORDER BY fecha_hora DESC";
+        $stmt = $pdo->query($sql);
+    }
+
+    $citas = $stmt->fetchAll();
+
 } catch (PDOException $e) {
-     // Si hay error, lo mostramos
-     error_log("Error al consultar citas: " . $e->getMessage());
-     $error = "No se pudieron cargar las citas. Inténtalo de nuevo más tarde.";
-     $citas = [];
+    error_log("Error al consultar citas: " . $e->getMessage());
+    $citas = [];
 }
 include '../includes/header.php';
 ?>
