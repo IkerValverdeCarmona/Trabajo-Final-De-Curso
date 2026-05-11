@@ -46,24 +46,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['nombre_real'] = $nombre_real;
 
             // --- RECUPERAR EL CARRITO DE LA BASE DE DATOS ---
-            try {
-                $stmt_cart = $pdo->prepare("SELECT id_producto, cantidad FROM Carrito WHERE id_perfil = ?");
-                $stmt_cart->execute([$id_perfil]);
-                $items_guardados = $stmt_cart->fetchAll(PDO::FETCH_ASSOC);
+           try {
+    $stmt_cart = $pdo->prepare("SELECT id_producto, cantidad FROM Carrito WHERE id_perfil = ?");
+    $stmt_cart->execute([$id_perfil]);
+    $items_guardados = $stmt_cart->fetchAll(PDO::FETCH_ASSOC);
 
-                if (!empty($items_guardados)) {
-                    if (!isset($_SESSION['carrito'])) {
-                        $_SESSION['carrito'] = [];
-                    }
-                    foreach ($items_guardados as $item) {
-                        $_SESSION['carrito'][$item['id_producto']] = ['cantidad' => $item['cantidad']];
-                    }
-                    // Limpiamos la tabla después de recuperar
-                    $pdo->prepare("DELETE FROM Carrito WHERE id_perfil = ?")->execute([$id_perfil]);
-                }
-            } catch (PDOException $e_cart) {
-                // Si falla el carrito, no bloqueamos el login
+    if (!empty($items_guardados)) {
+        if (!isset($_SESSION['carrito'])) {
+            $_SESSION['carrito'] = [];
+        }
+
+        foreach ($items_guardados as $item) {
+            $id_p = $item['id_producto'];
+            
+            // BUSCAMOS LOS DATOS DEL PRODUCTO (Nombre y Precio)
+            $stmt_prod = $pdo->prepare("SELECT nombre, precio_actual FROM Producto WHERE id_producto = ?");
+            $stmt_prod->execute([$id_p]);
+            $producto_info = $stmt_prod->fetch(PDO::FETCH_ASSOC);
+
+            if ($producto_info) {
+                // Rellenamos la sesión con TODO lo que necesita la cesta para pintar
+                $_SESSION['carrito'][$id_p] = [
+                    'nombre' => $producto_info['nombre'],
+                    'precio' => $producto_info['precio_actual'],
+                    'cantidad' => $item['cantidad']
+                ];
             }
+        }
+
+        // Limpiamos la tabla después de recuperar con éxito
+        $pdo->prepare("DELETE FROM Carrito WHERE id_perfil = ?")->execute([$id_perfil]);
+    }
+} catch (PDOException $e_cart) {
+    // Si falla algo, que al menos deje entrar al usuario
+}
 
             // 4. Redirección inteligente
             if ($rol === 'admin' || $rol === 'trabajador') {
