@@ -8,24 +8,22 @@ if (!isset($_SESSION['rol']) || ($_SESSION['rol'] !== 'admin' && $_SESSION['rol'
     exit;
 }
 
-$rol_actual = $_SESSION['rol'];
-
 try {
-    // 2. CONSULTA PARA OBTENER LOS PEDIDOS Y DATOS DEL USUARIO
-    // Unimos la tabla Opera con Usuario y Producto
+    // 2. CONSULTA SIN JOIN (Usando subconsultas)
+    // Buscamos los datos de Usuario y Producto mediante sub-SELECTs
     $sql = "SELECT 
-                o.fecha_compra, 
-                o.cantidad, 
-                o.precio_unitario_venta,
-                o.notas,
-                u.nombre AS cliente_nombre, 
-                u.apellido AS cliente_apellido, 
-                u.telefono AS cliente_telefono,
-                p.nombre AS producto_nombre
-            FROM Opera o
-            JOIN Usuario u ON o.id_perfil = u.id_perfil
-            JOIN Producto p ON o.id_producto = p.id_producto
-            ORDER BY o.fecha_compra DESC";
+                fecha_compra, 
+                cantidad, 
+                precio_unitario_venta,
+                notas,
+                id_producto,
+                id_perfil,
+                (SELECT nombre FROM Usuario WHERE id_perfil = Opera.id_perfil) AS cliente_nombre,
+                (SELECT apellido FROM Usuario WHERE id_perfil = Opera.id_perfil) AS cliente_apellido,
+                (SELECT telefono FROM Usuario WHERE id_perfil = Opera.id_perfil) AS cliente_telefono,
+                (SELECT nombre FROM Producto WHERE id_producto = Opera.id_producto) AS producto_nombre
+            FROM Opera
+            ORDER BY fecha_compra DESC";
 
     $stmt = $pdo->query($sql);
     $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -48,20 +46,20 @@ include '../includes/header.php';
     </div>
 
     <div style="margin-bottom: 30px;">
-        <h1 style="font-family: 'Playfair Display', serif; color: #EB6250; font-size: 2.5rem; margin: 0;">Gestión de Pedidos</h1>
-        <p style="color: #886752;">Listado de productos reservados por los clientes para recogida en centro.</p>
+        <h1 style="font-family: 'Playfair Display', serif; color: #EB6250; font-size: 2.5rem; margin: 0;">Pedidos Recibidos</h1>
+        <p style="color: #886752;">Control de productos reservados para recogida en el centro.</p>
     </div>
 
     <div class="card" style="background: #FFFFFF; padding: 0; overflow: hidden; border-radius: 20px; border: none; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);">
         <table style="width: 100%; border-collapse: collapse; text-align: left;">
             <thead style="background-color: #FFF7EE;">
                 <tr>
-                    <th style="padding: 20px; color: #886752; font-weight: 600;">Fecha</th>
-                    <th style="padding: 20px; color: #886752; font-weight: 600;">Cliente</th>
-                    <th style="padding: 20px; color: #886752; font-weight: 600;">Contacto</th>
-                    <th style="padding: 20px; color: #886752; font-weight: 600;">Producto</th>
-                    <th style="padding: 20px; color: #886752; font-weight: 600;">Cant.</th>
-                    <th style="padding: 20px; color: #886752; font-weight: 600;">Total</th>
+                    <th style="padding: 20px; color: #886752;">Fecha</th>
+                    <th style="padding: 20px; color: #886752;">Cliente</th>
+                    <th style="padding: 20px; color: #886752;">Teléfono</th>
+                    <th style="padding: 20px; color: #886752;">Producto</th>
+                    <th style="padding: 20px; color: #886752;">Cant.</th>
+                    <th style="padding: 20px; color: #886752;">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,22 +69,24 @@ include '../includes/header.php';
                     </tr>
                 <?php else: ?>
                     <?php foreach ($pedidos as $pedido): ?>
-                        <tr style="border-bottom: 1px solid #f9f9f9; transition: background 0.3s;" onmouseover="this.style.background='#fffcf8'" onmouseout="this.style.background='transparent'">
-                            <td style="padding: 15px 20px; color: #666; font-size: 0.9rem;">
+                        <tr style="border-bottom: 1px solid #f9f9f9;">
+                            <td style="padding: 15px 20px; color: #666;">
                                 <?php echo date('d/m/Y H:i', strtotime($pedido['fecha_compra'])); ?>
                             </td>
                             <td style="padding: 15px 20px;">
                                 <div style="font-weight: 600; color: #333;">
-                                    <?php echo htmlspecialchars($pedido['cliente_nombre'] . " " . $pedido['cliente_apellido']); ?>
+                                    <?php echo htmlspecialchars(($pedido['cliente_nombre'] ?? 'Desconocido') . " " . ($pedido['cliente_apellido'] ?? '')); ?>
                                 </div>
                             </td>
-                            <td style="padding: 15px 20px; color: #EB6250; font-weight: 500;">
-                                <?php echo htmlspecialchars($pedido['cliente_telefono']); ?>
+                            <td style="padding: 15px 20px;">
+                                <a href="tel:<?php echo $pedido['cliente_telefono']; ?>" style="color: #EB6250; text-decoration: none; font-weight: 500;">
+                                    <?php echo htmlspecialchars($pedido['cliente_telefono'] ?? 'S/T'); ?>
+                                </a>
                             </td>
                             <td style="padding: 15px 20px; color: #555;">
-                                <?php echo htmlspecialchars($pedido['producto_nombre']); ?>
+                                <?php echo htmlspecialchars($pedido['producto_nombre'] ?? 'Producto eliminado'); ?>
                             </td>
-                            <td style="padding: 15px 20px; color: #666; text-align: center;">
+                            <td style="padding: 15px 20px; text-align: center;">
                                 <?php echo $pedido['cantidad']; ?>
                             </td>
                             <td style="padding: 15px 20px; font-weight: 700; color: #333;">
