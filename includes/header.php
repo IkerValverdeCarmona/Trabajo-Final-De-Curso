@@ -1,89 +1,134 @@
 <?php
+// 1. Asegurarnos de que BASE_URL existe para que no se rompan las rutas
+// (Si tu proyecto está en una carpeta de xampp, cámbialo, ej: define('BASE_URL', '/lc_quiromasajes/'); )
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/'); 
+}
+
+//Calcular cuántos productos hay en el carrito para mostrar el globito en el menú
+$cantidad_carrito_header = 0;
+if (isset($_SESSION['carrito'])) {
+    $cantidad_carrito_header = array_sum(array_column($_SESSION['carrito'], 'cantidad'));
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LC Quiromasajes | Centro de Terapias y Bienestar</title>
-    
+    <title>LC Quiromasajes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css?v=<?php echo time(); ?>">
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFF7EE;
+            color: #333;
+        }
+        .navbar {
+            background-color: #FFFFFF;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #EB6250;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #EB6250;
+        }
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        /* Estilos del carrito en el header */
+        .cart-icon-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            font-size: 1.2rem;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: #EB6250;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 50px;
+        }
+        .btn-login {
+            background-color: #EB6250;
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
-    <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LC Quiromasajes | Centro de Terapias y Bienestar</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css?v=<?php echo time(); ?>">
-</head>
-<body>
-    <header class="navbar" id="navbar">
-        <div class="nav-container">
+
+<nav class="navbar">
+    <a href="<?= BASE_URL ?>index.php" class="logo">LC Quiromasajes</a>
+
+    <div class="nav-links">
+        <a href="<?= BASE_URL ?>index.php">Inicio</a>
+        <a href="<?= BASE_URL ?>index.php#servicios">Tratamientos</a>
+        <a href="<?= BASE_URL ?>tienda/index.php">Productos</a>
+        
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <a href="<?= BASE_URL ?>mis_citas.php">Mis Citas</a>
+        <?php endif; ?>
+    </div>
+
+    <div class="user-menu">
+        
+        <a href="<?= BASE_URL ?>tienda/carrito.php" class="cart-icon-container">
+            🛍️
+            <?php if ($cantidad_carrito_header > 0): ?>
+                <span class="cart-badge"><?= $cantidad_carrito_header ?></span>
+            <?php endif; ?>
+        </a>
+
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <span style="font-size: 0.9rem;">Hola, <strong><?= htmlspecialchars($_SESSION['nombre'] ?? 'Usuario') ?></strong></span>
             
-            <a href="<?php echo BASE_URL; ?>index.php" class="brand-logo">
-                LC Quiromasajes
-            </a>
+            <?php if (isset($_SESSION['id_rol']) && $_SESSION['id_rol'] == 1): ?>
+                <a href="<?= BASE_URL ?>admin/index.php" style="color: #886752; font-size: 0.9rem; text-decoration: none;">⚙️ Panel</a>
+            <?php endif; ?>
 
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <span></span><span></span><span></span>
-            </button>
-
-            <nav class="nav-links" id="navLinks">
-                <ul>
-                    <li><a href="<?php echo BASE_URL; ?>index.php#inicio">Inicio</a></li>
-                    <li><a href="<?php echo BASE_URL; ?>index.php#instalaciones">El Centro</a></li>
-                    <li><a href="<?php echo BASE_URL; ?>index.php#servicios">Tratamientos</a></li>
-                    <li><a href="<?php echo BASE_URL; ?>tienda.php">Productos</a></li>
-                </ul>
-                
-                <div class="nav-controls">
-                    <input type="text" placeholder="Buscar terapia..." class="input-radius" id="searchInput" style="border-radius: 12px;">
-                    <select class="input-radius" id="languageSelect" style="border-radius: 12px;">
-                        <option value="es">ES</option>
-                        <option value="en">EN</option>
-                    </select>
-                </div>
-
-                <div class="user-actions">
-                    <?php if (!isset($_SESSION['user_id'])): ?>
-                        <div id="guestState" style="display: flex; gap: 10px; align-items: center;">
-                            <a href="<?php echo BASE_URL; ?>auth/login.php" style="color: #EB6250; text-decoration: none; font-weight: 500;">Iniciar Sesión</a>
-                            <a href="<?php echo BASE_URL; ?>auth/registro.php" class="main-btn" style="background-color: #EB6250; color: white; padding: 8px 20px; border-radius: 50px; text-decoration: none;">Registrarse</a>
-                        </div>
-                    
-                    <?php else: ?>
-                        <div id="loggedState" class="user-profile">
-                            <div class="user-trigger" id="userMenuBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                                <div class="avatar" style="background-color: #EB6250; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                                    <?php echo strtoupper(substr($_SESSION['nombre_real'], 0, 1)); ?>
-                                </div>
-                                <span class="user-name">Hola, <?php echo htmlspecialchars($_SESSION['nombre_real']); ?></span>
-                            </div>
-
-                            <div class="dropdown-menu" id="userDropdown">
-                                <div class="dropdown-header">
-                                    <p class="text-muted" style="margin: 0;">Mi Cuenta</p>
-                                </div>
-                                <hr>
-                                <a href="<?php echo BASE_URL; ?>mis_citas.php">Mis Citas</a>
-                                <a href="<?php echo BASE_URL; ?>perfil.php">Mi Perfil</a> 
-                                
-                                <?php if(isset($_SESSION['rol']) && ($_SESSION['rol'] === 'admin' || $_SESSION['rol'] === 'trabajador')): ?>
-                                    <a href="<?php echo BASE_URL; ?>admin/admin.php">Panel Admin</a>
-                                <?php endif; ?>
-                                
-                                <hr>
-                                <a href="<?php echo BASE_URL; ?>auth/logout.php" class="text-danger" style="color: #D75443;">Cerrar Sesion</a>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </nav>
-        </div>
-    </header>
-    <main>
+            <a href="<?= BASE_URL ?>auth/logout.php" style="color: #c5221f; font-size: 0.9rem; text-decoration: none; font-weight: 500;">Salir</a>
+        <?php else: ?>
+            <a href="<?= BASE_URL ?>auth/login.php" class="btn-login">Iniciar Sesión</a>
+        <?php endif; ?>
+    </div>
+</nav>
