@@ -1,7 +1,5 @@
 <?php
 // 1. Asegurarnos de que BASE_URL existe para que no se rompan las rutas
-// Si tu proyecto está en una subcarpeta (ej: htdocs/lc_quiromasajes), defínelo aquí.
-// Si ya lo tienes en db.php, esta comprobación evita errores.
 if (!defined('BASE_URL')) {
     define('BASE_URL', '/'); 
 }
@@ -28,7 +26,7 @@ if (isset($_SESSION['carrito'])) {
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css?v=<?php echo time(); ?>">
 
     <style>
-        /* Estilos específicos para el icono del carrito en el header */
+        /* Estilos específicos del header para Carrito y Menú de Usuario */
         .cart-icon-container {
             position: relative;
             display: flex;
@@ -54,6 +52,44 @@ if (isset($_SESSION['carrito'])) {
             border-radius: 50px;
             border: 2px solid white;
         }
+
+        .dropdown-menu-custom {
+            position: absolute;
+            right: 0;
+            top: 120%;
+            background: white;
+            border-radius: 15px;
+            min-width: 220px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: none; /* Oculto por defecto */
+            z-index: 9999;
+            border: 1px solid #f0f0f0;
+            padding: 10px 0;
+            animation: slideIn 0.2s ease-out;
+        }
+
+        .dropdown-menu-custom.show {
+            display: block; /* Se muestra con JS */
+        }
+
+        .dropdown-menu-custom a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu-custom a:hover {
+            background: #FFF7EE;
+            color: #EB6250;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -64,8 +100,8 @@ if (isset($_SESSION['carrito'])) {
                 LC Quiromasajes
             </a>
 
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <span></span><span></span><span></span>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" style="border: none; background: none; font-size: 1.5rem; cursor: pointer;">
+                ☰
             </button>
 
             <nav class="nav-links" id="navLinks" style="display: flex; align-items: center; gap: 30px;">
@@ -77,8 +113,8 @@ if (isset($_SESSION['carrito'])) {
                 </ul>
                 
                 <div class="nav-controls" style="display: flex; gap: 10px;">
-                    <input type="text" placeholder="Buscar terapia..." class="input-radius" id="searchInput" style="border-radius: 12px; padding: 8px 15px; border: 1px solid #ddd;">
-                    <select class="input-radius" id="languageSelect" style="border-radius: 12px; padding: 8px; border: 1px solid #ddd;">
+                    <input type="text" placeholder="Buscar terapia..." class="input-radius" id="searchInput" style="border-radius: 12px; padding: 8px 15px; border: 1px solid #ddd; font-family: 'Poppins', sans-serif;">
+                    <select class="input-radius" id="languageSelect" style="border-radius: 12px; padding: 8px; border: 1px solid #ddd; font-family: 'Poppins', sans-serif;">
                         <option value="es">ES</option>
                         <option value="en">EN</option>
                     </select>
@@ -102,45 +138,53 @@ if (isset($_SESSION['carrito'])) {
                     <?php else: ?>
                         <div id="loggedState" class="user-profile" style="position: relative;">
                             
-                            <div class="user-trigger" id="userMenuBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                                <div class="avatar" style="background-color: #EB6250; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                            <div class="user-trigger" id="userMenuBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 10px; border-radius: 12px; transition: background 0.3s;">
+                                <div class="avatar" style="background-color: #EB6250; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; pointer-events: none;">
                                     <?php echo strtoupper(substr($_SESSION['nombre_real'] ?? 'U', 0, 1)); ?>
                                 </div>
-                                <span class="user-name" style="font-weight: 500; color: #333;">Hola, <?php echo htmlspecialchars($_SESSION['nombre_real'] ?? 'Usuario'); ?></span>
+                                <span class="user-name" style="font-weight: 500; color: #333; pointer-events: none;">
+                                    Hola, <?php echo htmlspecialchars($_SESSION['nombre_real'] ?? 'Usuario'); ?>
+                                </span>
+                                <span style="font-size: 0.7rem; pointer-events: none;">▼</span>
                             </div>
 
-                            <div class="dropdown-menu" id="userDropdown" style="position: absolute; right: 0; top: 100%; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; padding: 15px; min-width: 200px; display: none; z-index: 1000;">
-                                <div class="dropdown-header" style="margin-bottom: 10px;">
-                                    <p class="text-muted" style="margin: 0; font-size: 0.85rem; color: #888;">Mi Cuenta</p>
+                            <div class="dropdown-menu-custom" id="userDropdown">
+                                <div style="padding: 10px 15px;">
+                                    <p style="margin: 0; font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px;">Mi Cuenta</p>
                                 </div>
-                                <hr style="margin: 10px 0; border-color: #eee;">
+                                <hr style="margin: 5px 0; border: 0; border-top: 1px solid #eee;">
                                 
-                                <a href="<?php echo BASE_URL; ?>mis_citas.php" style="display: block; padding: 8px 0; color: #333; text-decoration: none;">Mis Citas</a>
-                                <a href="<?php echo BASE_URL; ?>perfil.php" style="display: block; padding: 8px 0; color: #333; text-decoration: none;">Mi Perfil</a> 
+                                <a href="<?php echo BASE_URL; ?>mis_citas.php">📅 Mis Citas</a>
+                                <a href="<?php echo BASE_URL; ?>perfil.php">👤 Mi Perfil</a> 
                                 
                                 <?php if(isset($_SESSION['rol']) && ($_SESSION['rol'] === 'admin' || $_SESSION['rol'] === 'trabajador')): ?>
-                                    <a href="<?php echo BASE_URL; ?>admin/index.php" style="display: block; padding: 8px 0; color: #EB6250; font-weight: 600; text-decoration: none;">Panel de Gestión</a>
+                                    <a href="<?php echo BASE_URL; ?>admin/index.php" style="color: #EB6250; font-weight: 600;">⚙️ Panel de Gestión</a>
                                 <?php endif; ?>
                                 
-                                <hr style="margin: 10px 0; border-color: #eee;">
-                                <a href="<?php echo BASE_URL; ?>auth/logout.php" class="text-danger" style="display: block; padding: 8px 0; color: #c5221f; text-decoration: none;">Cerrar Sesión</a>
+                                <hr style="margin: 5px 0; border: 0; border-top: 1px solid #eee;">
+                                <a href="<?php echo BASE_URL; ?>auth/logout.php" style="color: #c5221f;">🚪 Cerrar Sesión</a>
                             </div>
                         </div>
-                        
+
                         <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                const userBtn = document.getElementById('userMenuBtn');
-                                const dropdown = document.getElementById('userDropdown');
-                                if(userBtn && dropdown) {
-                                    userBtn.addEventListener('click', function(e) {
+                            (function() {
+                                const btn = document.getElementById('userMenuBtn');
+                                const menu = document.getElementById('userDropdown');
+
+                                if (btn && menu) {
+                                    btn.addEventListener('click', function(e) {
                                         e.stopPropagation();
-                                        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                                        menu.classList.toggle('show');
                                     });
-                                    document.addEventListener('click', function() {
-                                        dropdown.style.display = 'none';
+
+                                    // Cerrar el menú si se hace clic fuera de él
+                                    document.addEventListener('click', function(e) {
+                                        if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                                            menu.classList.remove('show');
+                                        }
                                     });
                                 }
-                            });
+                            })();
                         </script>
                     <?php endif; ?>
                 </div>
