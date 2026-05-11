@@ -10,9 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['rol'])) {
     $stmt = $pdo->prepare($sql);
     
     if ($stmt->execute([$nuevo_estado, $id_cita])) {
-        header("Location: admin.php?res=ok");
+        header("Location: admin_citas.php?res=ok");
     } else {
-        header("Location: admin.php?res=error");
+        header("Location: admin_citas.php?res=error");
     }
     exit;
 }

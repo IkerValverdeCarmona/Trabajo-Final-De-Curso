@@ -9,9 +9,6 @@ if (!isset($_SESSION['rol']) || ($_SESSION['rol'] !== 'admin' && $_SESSION['rol'
     header("Location: ../index.php");
     exit;
 }
-
-// Consultamos las citas con JOINs
-// Consultamos las citas usando subconsultas en lugar de JOINs
 try {
     $sql = "SELECT 
                 id_cita, 
@@ -31,8 +28,6 @@ try {
      $error = "No se pudieron cargar las citas. Inténtalo de nuevo más tarde.";
      $citas = [];
 }
-
-// 3. CORRECCIÓN DE RUTA: Salir para incluir el header
 include '../includes/header.php';
 ?>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
