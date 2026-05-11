@@ -3,18 +3,24 @@ session_start();
 require_once 'includes/db.php';
 
 // 1. SEGURIDAD: Solo usuarios logueados pueden reservar
-if (!isset($_SESSION['id_perfil'])) {
-    header("Location: login/index.html");
+// Usamos 'user_id' que es la clave que definimos en el login de Google y el normal
+if (!isset($_SESSION['user_id'])) {
+    header("Location: auth/login.php");
     exit;
 }
-$id_perfil_actual = $_SESSION['id_perfil'];
+$id_perfil_actual = $_SESSION['user_id']; 
 
 $mensaje = "";
 $margen_limpieza = 5;
 
 // Funciones para calcular los huecos
 function obtenerHorasOcupadas($pdo, $id_trabajador, $fecha) {
-    $sql = "SELECT DATE_FORMAT(fecha_hora, '%H:%i') FROM Citas WHERE id_trabajador = ? AND DATE(fecha_hora) = ?";
+    $sql = "SELECT DATE_FORMAT(fecha_hora, '%H:%i') 
+            FROM Citas 
+            WHERE id_trabajador = ? 
+            AND DATE(fecha_hora) = ? 
+            AND estado != 'Cancelada'";
+            
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id_trabajador, $fecha]);
     return $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -72,18 +78,28 @@ if ($id_trabajador && $id_servicio) {
 // Guardar reserva y redirigir
 if (isset($_POST['confirmar'])) {
     try {
+        // Combinamos fecha y hora correctamente para MySQL
         $fecha_hora_formateada = $_POST['fecha'] . ' ' . $_POST['hora'] . ':00';
         
-        $sql = "INSERT INTO Citas (id_perfil, id_trabajador, id_servicio, fecha_hora, precio_final) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO Citas (id_perfil, id_trabajador, id_servicio, fecha_hora, precio_final, estado) VALUES (?, ?, ?, ?, ?, 'Pendiente')";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id_perfil_actual, $_POST['id_trabajador'], $_POST['id_servicio'], $fecha_hora_formateada, $precio_servicio]);
         
-        // Creamos el mensaje y saltamos a mis_citas
+        // Usamos $id_perfil_actual que ahora sí tiene el valor correcto de la sesión
+        $stmt->execute([
+            $id_perfil_actual, 
+            $_POST['id_trabajador'], 
+            $_POST['id_servicio'], 
+            $fecha_hora_formateada, 
+            $precio_servicio
+        ]);
+        
         $_SESSION['mensaje_exito'] = "¡Reserva confirmada con éxito! Te esperamos el " . date('d/m/Y', strtotime($_POST['fecha'])) . " a las " . $_POST['hora'] . ".";
         header("Location: mis_citas.php");
         exit();
     } catch (PDOException $e) {
-        $mensaje = "<div style='background: #f8d7da; color: #721c24; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center;'>Error al procesar la reserva.</div>";
+        // En caso de error, mostramos el mensaje real para poder arreglarlo
+        $mensaje = "<div style='background: #f8d7da; color: #721c24; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center;'>
+                    <strong>Error al procesar la reserva:</strong><br>" . $e->getMessage() . "</div>";
     }
 }
 
@@ -140,16 +156,20 @@ include 'includes/header.php';
                     <div style="margin-bottom: 20px;">
                         <label style="font-weight: 500; font-size: 0.9rem; margin-bottom: 8px; display: block;">4. Horarios Disponibles:</label>
                         <select name="hora" required style="width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #E0E0E0; font-family: 'Poppins', sans-serif;">
-                            <optgroup label="Turno Mañana">
-                                <?php foreach($horas_mañana as $h): ?>
-                                    <option value="<?= $h ?>"><?= $h ?></option>
-                                <?php endforeach; ?>
-                            </optgroup>
-                            <optgroup label="Turno Tarde">
-                                <?php foreach($horas_tarde as $h): ?>
-                                    <option value="<?= $h ?>"><?= $h ?></option>
-                                <?php endforeach; ?>
-                            </optgroup>
+                            <?php if(empty($horas_mañana) && empty($horas_tarde)): ?>
+                                <option value="">No hay huecos disponibles para este día</option>
+                            <?php else: ?>
+                                <optgroup label="Turno Mañana">
+                                    <?php foreach($horas_mañana as $h): ?>
+                                        <option value="<?= $h ?>"><?= $h ?></option>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                                <optgroup label="Turno Tarde">
+                                    <?php foreach($horas_tarde as $h): ?>
+                                        <option value="<?= $h ?>"><?= $h ?></option>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                            <?php endif; ?>
                         </select>
                         <span style="font-size: 0.8rem; color: #888; margin-top: 5px; display: block;">* Incluye 5 min de margen sanitario.</span>
                     </div>

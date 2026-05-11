@@ -1,81 +1,111 @@
 <?php
 session_start();
+require_once 'includes/db.php';
 
-// 1. Verificación de seguridad
-if (!isset($_SESSION['email'])) {
-    // Si no hay sesión, mandamos al index (o login)
-    header("Location: index.php"); 
+// 1. SEGURIDAD: Si no hay sesión, mandamos al login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: auth/login.php");
     exit;
 }
 
-// 2. Cargamos la conexión centralizada
-require_once 'includes/db.php'; 
+$id_perfil = $_SESSION['user_id'];
+$mensaje = "";
 
-try {
-    // Usamos directamente la variable $pdo que definimos en includes/db.php
-    $stmt = $pdo->prepare("SELECT email, permiso FROM Perfil WHERE email = ?");
-    $stmt->execute([$_SESSION['email']]);
-    $datos_usuario = $stmt->fetch();
+// 2. LÓGICA DE ACTUALIZACIÓN: Por si el usuario quiere cambiar sus datos
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
+    $nuevo_nombre = $_POST['nombre'];
+    $nuevo_apellido = $_POST['apellido'];
+    $nuevo_telefono = $_POST['telefono'];
 
-    if (!$datos_usuario) {
-        // Por si acaso el usuario no existe en la BD pero la sesión sigue activa
-        session_destroy();
-        header("Location: index.php");
-        exit;
+    try {
+        $sql = "UPDATE Usuario SET nombre = ?, apellido = ?, telefono = ? WHERE id_perfil = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$nuevo_nombre, $nuevo_apellido, $nuevo_telefono, $id_perfil]);
+        
+        // Actualizamos también la variable de sesión para que el header se refresque
+        $_SESSION['nombre_real'] = $nuevo_nombre;
+        $mensaje = "¡Datos actualizados correctamente!";
+    } catch (PDOException $e) {
+        $mensaje = "Error al actualizar los datos.";
     }
-
-} catch (PDOException $e) {
-    die("Error al cargar el perfil: " . $e->getMessage());
 }
+
+// 3. OBTENER DATOS: Traemos la info de Usuario y el Email usando subconsulta
+try {
+    $sql = "SELECT 
+                *, 
+                (SELECT email FROM Perfil WHERE id_perfil = Usuario.id_perfil) AS email 
+            FROM Usuario 
+            WHERE id_perfil = ?";
+            
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id_perfil]);
+    $user = $stmt->fetch();
+    
+} catch (PDOException $e) {
+    die("Error al cargar el perfil.");
+}
+
+include 'includes/header.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil - LC Quiromasajes</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="assets/css/style.css?v=<?php echo time(); ?>">
-</head>
-<body style="background: linear-gradient(to bottom, #FFF7EE, #FDF2D8); font-family: 'Poppins', sans-serif; min-height: 100vh;">
-
-    <main style="max-width: 600px; margin: 80px auto; padding: 20px;">
+<main style="background: linear-gradient(135deg, #FFF7EE 0%, #FDF2D8 100%); min-height: 90vh; padding: 60px 20px;">
+    <div style="max-width: 800px; margin: 0 auto;">
         
-        <div class="card-perfil" style="background-color: #FFFFFF; border-radius: 20px; padding: 40px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05); text-align: center;">
+        <div style="background: #FFFFFF; border-radius: 20px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05); overflow: hidden;">
             
-            <h1 style="font-family: 'Playfair Display', serif; color: #333; margin-bottom: 5px; font-weight: 700;">Mi Cuenta</h1>
-            <p style="color: #666; margin-bottom: 30px;">Gestiona tus datos y citas</p>
-
-            <div style="text-align: left; margin-bottom: 30px; line-height: 1.6; background: #fdfdfd; padding: 20px; border-radius: 12px; border: 1px solid #eee;">
-                <p style="margin-bottom: 10px;">
-                    <strong style="color: #EB6250;">Email registrado:</strong><br> 
-                    <?php echo htmlspecialchars($datos_usuario['email']); ?>
-                </p>
-                <p>
-                    <strong style="color: #EB6250;">Tipo de cuenta:</strong><br> 
-                    <span style="text-transform: capitalize;"><?php echo htmlspecialchars($datos_usuario['permiso']); ?></span>
-                </p>
+            <div style="background: #EB6250; padding: 40px; text-align: center; color: white;">
+                <div style="width: 100px; height: 100px; background: white; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: #EB6250; font-weight: bold; border: 4px solid rgba(255,255,255,0.3);">
+                    <?= strtoupper(substr($user['nombre'], 0, 1)) ?>
+                </div>
+                <h1 style="font-family: 'Playfair Display', serif; margin: 0; font-size: 2rem;">Mi Perfil</h1>
+                <p style="font-family: 'Poppins', sans-serif; opacity: 0.9; margin-top: 5px;">Gestiona tu información personal</p>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
-                <a href="mis_citas.php" class="btn" style="background-color: #EB6250; color: white; padding: 14px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: background 0.3s; width: 80%;">
-                    Ver mis citas
-                </a>
+            <div style="padding: 40px; font-family: 'Poppins', sans-serif;">
                 
-                <a href="login/logout.php" style="color: #dc3545; text-decoration: none; font-size: 0.9rem; font-weight: 500; margin-top: 10px;">
-                    Cerrar Sesión
-                </a>
+                <?php if ($mensaje): ?>
+                    <div style="background: #e6f4ea; color: #1e7e34; padding: 15px; border-radius: 12px; margin-bottom: 25px; text-align: center; border: 1px solid #c3e6cb;">
+                        ✨ <?= $mensaje ?>
+                    </div>
+                <?php endif; ?>
+
+                <form method="POST" action="perfil.php" style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+                    
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; color: #888; font-size: 0.85rem; margin-bottom: 8px;">Correo Electrónico (No editable)</label>
+                        <input type="email" value="<?= htmlspecialchars($user['email']) ?>" disabled style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #eee; background: #f9f9f9; color: #999; cursor: not-allowed;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; color: #333; font-size: 0.9rem; margin-bottom: 8px; font-weight: 500;">Nombre</label>
+                        <input type="text" name="nombre" value="<?= htmlspecialchars($user['nombre']) ?>" required style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; font-family: 'Poppins', sans-serif;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; color: #333; font-size: 0.9rem; margin-bottom: 8px; font-weight: 500;">Apellidos</label>
+                        <input type="text" name="apellido" value="<?= htmlspecialchars($user['apellido']) ?>" required style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; font-family: 'Poppins', sans-serif;">
+                    </div>
+
+                    <div style="grid-column: span 2;">
+                        <label style="display: block; color: #333; font-size: 0.9rem; margin-bottom: 8px; font-weight: 500;">Teléfono de contacto</label>
+                        <input type="text" name="telefono" value="<?= htmlspecialchars($user['telefono']) ?>" required style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; font-family: 'Poppins', sans-serif;">
+                    </div>
+
+                    <div style="grid-column: span 2; margin-top: 10px;">
+                        <button type="submit" name="actualizar" style="width: 100%; background: #EB6250; color: white; border: none; padding: 15px; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif;" onmouseover="this.style.background='#D75443'" onmouseout="this.style.background='#EB6250'">
+                            Guardar Cambios
+                        </button>
+                    </div>
+
+                </form>
+
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: center;">
+                    <p style="color: #888; font-size: 0.85rem;">Miembro desde: <?= date('d/m/Y', strtotime($user['fecha_reg'] ?? 'now')) ?></p>
+                </div>
             </div>
-
         </div>
+    </div>
+</main>
 
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="index.php" style="color: #666; text-decoration: none; font-size: 0.9rem;">← Volver al inicio</a>
-        </div>
-    </main>
-
-</body>
-</html>
+<?php include 'includes/footer.php'; ?>
