@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // 4. Redirección inteligente
             if ($rol === 'admin' || $rol === 'trabajador') {
-                header("Location: ../admin/admin.php");
+                header("Location: ../admin/index.php");
             } else {
                 header("Location: ../index.php");
             }
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         } else {
             // Si falla la contraseña o el correo
-            header("Location: login.php?error=1");
+            header("Location: index.php?error=1");
             exit();
         }
 
