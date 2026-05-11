@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         } else {
             // Si falla la contraseña o el correo
-            header("Location: index.php?error=1");
+            header("Location: ../login.php?error=1");
             exit();
         }
 
