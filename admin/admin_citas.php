@@ -1,14 +1,10 @@
 <?php
 session_start();
 require_once '../includes/db.php';
-
-// 1. SEGURIDAD: Solo trabajadores o el admin
 if (!isset($_SESSION['rol']) || ($_SESSION['rol'] !== 'admin' && $_SESSION['rol'] !== 'trabajador')) {
     header("Location: ../index.php");
     exit;
 }
-
-// 2. PROCESAR EL CAMBIO DE ESTADO (Vía GET para los botones rápidos)
 if (isset($_GET['id_cita']) && isset($_GET['nuevo_estado'])) {
     try {
         $updateStmt = $pdo->prepare("UPDATE Citas SET estado = ? WHERE id_cita = ?");
@@ -19,12 +15,9 @@ if (isset($_GET['id_cita']) && isset($_GET['nuevo_estado'])) {
         $error_estado = "Error al actualizar la cita.";
     }
 }
-
 $rol_actual = $_SESSION['rol'];
 $id_perfil_actual = $_SESSION['user_id'];
-
 try {
-    // 3. CONSULTA SIN JOIN (Subconsultas)
     $sql = "SELECT 
                 id_cita, fecha_hora, estado, precio_final,
                 (SELECT nombre FROM Usuario WHERE id_perfil = Citas.id_perfil) AS cliente,
