@@ -9,10 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // 1. Buscamos el perfil por email
         // IMPORTANTE: He puesto 'contrasena', cámbialo a 'password' si así se llama tu columna
-        $stmt = $pdo->prepare("SELECT id_perfil, email, constraseña, rol FROM Perfil WHERE email = ?");
+        $stmt = $pdo->prepare("SELECT id_perfil, email, contraseña, rol FROM Perfil WHERE email = ?");
         $stmt->execute([$email]);
         $perfil = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    
         // 2. Verificamos si existe y si la contraseña coincide
         if ($perfil && password_verify($password, $perfil['contraseña'])) {
             
