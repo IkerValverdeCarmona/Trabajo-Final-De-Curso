@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once 'db.php'; // Para usar BASE_URL
+require_once 'db.php'; 
 
 $clientID = '972400545344-30tnhtblltv9pb8kmvf45s1pdecal044.apps.googleusercontent.com';
 $clientSecret = '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';
