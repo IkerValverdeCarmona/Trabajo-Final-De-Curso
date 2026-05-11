@@ -1,5 +1,5 @@
 <?php
-// 1. Asegurarnos de que BASE_URL existe para que no se rompan las rutas
+// 1. Asegurarnos de que BASE_URL existe
 if (!defined('BASE_URL')) {
     define('BASE_URL', '/'); 
 }
@@ -26,23 +26,67 @@ if (isset($_SESSION['carrito'])) {
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css?v=<?php echo time(); ?>">
 
     <style>
+        /* Diseño estructural del Header */
+        .navbar-custom {
+            background-color: #FFFFFF;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .nav-container-custom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        /* 3 Bloques equilibrados */
+        .nav-left { flex: 1; display: flex; justify-content: flex-start; }
+        .nav-center { flex: 2; display: flex; justify-content: center; }
+        .nav-right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 25px; }
+
+        .nav-links-list {
+            display: flex;
+            list-style: none;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links-list a {
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        
+        .nav-links-list a:hover {
+            color: #EB6250;
+        }
+
+        /* Icono Carrito */
         .cart-icon-container {
             position: relative;
             display: flex;
             align-items: center;
             text-decoration: none;
             color: #333;
-            font-size: 1.3rem;
-            margin-right: 20px;
+            font-size: 1.4rem;
             transition: transform 0.2s;
         }
-        .cart-icon-container:hover {
-            transform: scale(1.1);
-        }
+        .cart-icon-container:hover { transform: scale(1.1); }
         .cart-badge {
             position: absolute;
-            top: -8px;
-            right: -10px;
+            top: -6px;
+            right: -8px;
             background-color: #EB6250;
             color: white;
             font-size: 0.7rem;
@@ -52,38 +96,31 @@ if (isset($_SESSION['carrito'])) {
             border: 2px solid white;
         }
 
+        /* Menú Desplegable */
         .dropdown-menu-custom {
             position: absolute;
             right: 0;
-            top: 120%;
+            top: calc(100% + 15px);
             background: white;
             border-radius: 15px;
             min-width: 220px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             display: none;
             z-index: 9999;
-            border: 1px solid #f0f0f0;
+            border: 1px solid #f5f5f5;
             padding: 10px 0;
             animation: slideIn 0.2s ease-out;
         }
-
-        .dropdown-menu-custom.show {
-            display: block;
-        }
-
+        .dropdown-menu-custom.show { display: block; }
         .dropdown-menu-custom a {
             display: block;
             padding: 10px 20px;
-            color: #333;
+            color: #444;
             text-decoration: none;
             font-size: 0.95rem;
             transition: background 0.2s;
         }
-
-        .dropdown-menu-custom a:hover {
-            background: #FFF7EE;
-            color: #EB6250;
-        }
+        .dropdown-menu-custom a:hover { background: #FFF7EE; color: #EB6250; }
 
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -92,92 +129,92 @@ if (isset($_SESSION['carrito'])) {
     </style>
 </head>
 <body>
-    <header class="navbar" id="navbar">
-        <div class="nav-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 5%;">
+    <header class="navbar-custom">
+        <div class="nav-container-custom">
             
-            <a href="<?php echo BASE_URL; ?>index.php" class="brand-logo" style="font-family: 'Playfair Display', serif; color: #EB6250; font-size: 1.8rem; font-weight: 700; text-decoration: none;">
-                LC Quiromasajes
-            </a>
+            <div class="nav-left">
+                <a href="<?php echo BASE_URL; ?>index.php" style="font-family: 'Playfair Display', serif; color: #EB6250; font-size: 1.8rem; font-weight: 700; text-decoration: none; letter-spacing: -0.5px;">
+                    LC Quiromasajes
+                </a>
+            </div>
 
-            <button class="mobile-menu-btn" id="mobileMenuBtn" style="border: none; background: none; font-size: 1.5rem; cursor: pointer;">
-                ☰
-            </button>
-
-            <nav class="nav-links" id="navLinks" style="display: flex; align-items: center; gap: 30px;">
-                <ul style="display: flex; list-style: none; gap: 20px; margin: 0; padding: 0;">
-                    <li><a href="<?php echo BASE_URL; ?>index.php#inicio" style="text-decoration: none; color: #333; font-weight: 500;">Inicio</a></li>
-                    <li><a href="<?php echo BASE_URL; ?>index.php#servicios" style="text-decoration: none; color: #333; font-weight: 500;">Tratamientos</a></li>
-                    <li><a href="<?php echo BASE_URL; ?>tienda/index.php" style="text-decoration: none; color: #333; font-weight: 500;">Productos</a></li>
+            <nav class="nav-center">
+                <ul class="nav-links-list">
+                    <li><a href="<?php echo BASE_URL; ?>index.php#inicio">Inicio</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>index.php#instalaciones">El Centro</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>index.php#servicios">Tratamientos</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>tienda/index.php">Productos</a></li>
                 </ul>
+            </nav>
 
-                <div class="user-actions" style="display: flex; align-items: center;">
-                    
-                    <a href="<?php echo BASE_URL; ?>tienda/carrito.php" class="cart-icon-container">
-                        🛒
-                        <?php if ($cantidad_carrito_header > 0): ?>
-                            <span class="cart-badge"><?php echo $cantidad_carrito_header; ?></span>
-                        <?php endif; ?>
-                    </a>
+            <div class="nav-right">
+                
+                <a href="<?php echo BASE_URL; ?>tienda/carrito.php" class="cart-icon-container">
+                    🛒
+                    <?php if ($cantidad_carrito_header > 0): ?>
+                        <span class="cart-badge"><?php echo $cantidad_carrito_header; ?></span>
+                    <?php endif; ?>
+                </a>
 
-                    <?php if (!isset($_SESSION['user_id'])): ?>
-                        <div id="guestState" style="display: flex; gap: 15px; align-items: center;">
-                            <a href="<?php echo BASE_URL; ?>auth/login.php" style="color: #EB6250; text-decoration: none; font-weight: 500;">Iniciar Sesión</a>
-                            <a href="<?php echo BASE_URL; ?>auth/registro.php" class="main-btn" style="background-color: #EB6250; color: white; padding: 8px 20px; border-radius: 50px; text-decoration: none; font-weight: 600;">Registrarse</a>
-                        </div>
-                    <?php else: ?>
-                        <div id="loggedState" class="user-profile" style="position: relative;">
-                            
-                            <div class="user-trigger" id="userMenuBtn" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 10px; border-radius: 12px; transition: background 0.3s;">
-                                <div class="avatar" style="background-color: #EB6250; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; pointer-events: none;">
-                                    <?php echo strtoupper(substr($_SESSION['nombre_real'] ?? 'U', 0, 1)); ?>
-                                </div>
-                                <span class="user-name" style="font-weight: 500; color: #333; pointer-events: none;">
-                                    Hola, <?php echo htmlspecialchars($_SESSION['nombre_real'] ?? 'Usuario'); ?>
-                                </span>
-                                <span style="font-size: 0.7rem; pointer-events: none;">▼</span>
+                <?php if (!isset($_SESSION['user_id'])): ?>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <a href="<?php echo BASE_URL; ?>auth/login.php" style="color: #EB6250; text-decoration: none; font-weight: 500;">Iniciar Sesión</a>
+                        <a href="<?php echo BASE_URL; ?>auth/registro.php" style="background-color: #EB6250; color: white; padding: 10px 24px; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(235,98,80,0.2);">Registrarse</a>
+                    </div>
+                <?php else: ?>
+                    <div style="position: relative;">
+                        <div id="userMenuBtn" style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 6px 12px; border-radius: 50px; border: 1px solid #eee; transition: background 0.3s;" onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='transparent'">
+                            <div style="background-color: #EB6250; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; pointer-events: none;">
+                                <?php echo strtoupper(substr($_SESSION['nombre_real'] ?? 'U', 0, 1)); ?>
                             </div>
+                            <span style="font-weight: 500; color: #333; font-size: 0.95rem; pointer-events: none;">
+                                <?php echo htmlspecialchars($_SESSION['nombre_real'] ?? 'Usuario'); ?>
+                            </span>
+                            <span style="font-size: 0.6rem; color: #888; pointer-events: none;">▼</span>
+                        </div>
 
-                            <div class="dropdown-menu-custom" id="userDropdown">
-                                <div style="padding: 10px 15px;">
-                                    <p style="margin: 0; font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px;">Mi Cuenta</p>
-                                </div>
-                                <hr style="margin: 5px 0; border: 0; border-top: 1px solid #eee;">
-                                
+                        <div class="dropdown-menu-custom" id="userDropdown">
+                            <div style="padding: 10px 20px; background: #fafafa; border-radius: 15px 15px 0 0; margin-top: -10px; border-bottom: 1px solid #f0f0f0;">
+                                <p style="margin: 0; font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Mi Cuenta</p>
+                            </div>
+                            
+                            <div style="padding: 5px 0;">
                                 <a href="<?php echo BASE_URL; ?>mis_citas.php">📅 Mis Citas</a>
                                 <a href="<?php echo BASE_URL; ?>mis_pedidos.php">🛍️ Mis Pedidos</a>
                                 <a href="<?php echo BASE_URL; ?>perfil.php">👤 Mi Perfil</a> 
-                                
-                                <?php if(isset($_SESSION['rol']) && ($_SESSION['rol'] === 'admin' || $_SESSION['rol'] === 'trabajador')): ?>
-                                    <a href="<?php echo BASE_URL; ?>admin/index.php" style="color: #EB6250; font-weight: 600;">⚙️ Panel de Gestión</a>
-                                <?php endif; ?>
-                                
-                                <hr style="margin: 5px 0; border: 0; border-top: 1px solid #eee;">
-                                <a href="<?php echo BASE_URL; ?>auth/logout.php" style="color: #c5221f;">🚪 Cerrar Sesión</a>
                             </div>
+                            
+                            <?php if(isset($_SESSION['rol']) && ($_SESSION['rol'] === 'admin' || $_SESSION['rol'] === 'trabajador')): ?>
+                                <div style="border-top: 1px solid #f0f0f0; margin: 5px 0;"></div>
+                                <a href="<?php echo BASE_URL; ?>admin/index.php" style="color: #EB6250; font-weight: 600;">⚙️ Panel de Gestión</a>
+                            <?php endif; ?>
+                            
+                            <div style="border-top: 1px solid #f0f0f0; margin: 5px 0;"></div>
+                            <a href="<?php echo BASE_URL; ?>auth/logout.php" style="color: #c5221f;">🚪 Cerrar Sesión</a>
                         </div>
+                    </div>
 
-                        <script>
-                            (function() {
-                                const btn = document.getElementById('userMenuBtn');
-                                const menu = document.getElementById('userDropdown');
+                    <script>
+                        (function() {
+                            const btn = document.getElementById('userMenuBtn');
+                            const menu = document.getElementById('userDropdown');
 
-                                if (btn && menu) {
-                                    btn.addEventListener('click', function(e) {
-                                        e.stopPropagation();
-                                        menu.classList.toggle('show');
-                                    });
+                            if (btn && menu) {
+                                btn.addEventListener('click', function(e) {
+                                    e.stopPropagation();
+                                    menu.classList.toggle('show');
+                                });
 
-                                    document.addEventListener('click', function(e) {
-                                        if (!menu.contains(e.target) && !btn.contains(e.target)) {
-                                            menu.classList.remove('show');
-                                        }
-                                    });
-                                }
-                            })();
-                        </script>
-                    <?php endif; ?>
-                </div>
-            </nav>
+                                document.addEventListener('click', function(e) {
+                                    if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                                        menu.classList.remove('show');
+                                    }
+                                });
+                            }
+                        })();
+                    </script>
+                <?php endif; ?>
+            </div>
         </div>
     </header>
     <main>
