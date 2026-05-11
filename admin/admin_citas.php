@@ -46,7 +46,6 @@ try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id_perfil_actual]);
     } else {
-        // Si es admin (Iker), ve todas las citas
         $sql .= " ORDER BY fecha_hora DESC";
         $stmt = $pdo->query($sql);
     }
@@ -136,6 +135,5 @@ include '../includes/header.php';
 </div>
 
 <?php 
-// 4. CORRECCIÓN DE RUTA: Salir para incluir el footer
 include '../includes/footer.php'; 
 ?>
