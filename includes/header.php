@@ -107,7 +107,6 @@ if (isset($_SESSION['carrito'])) {
             <nav class="nav-links" id="navLinks" style="display: flex; align-items: center; gap: 30px;">
                 <ul style="display: flex; list-style: none; gap: 20px; margin: 0; padding: 0;">
                     <li><a href="<?php echo BASE_URL; ?>index.php#inicio" style="text-decoration: none; color: #333; font-weight: 500;">Inicio</a></li>
-                    <li><a href="<?php echo BASE_URL; ?>index.php#instalaciones" style="text-decoration: none; color: #333; font-weight: 500;">El Centro</a></li>
                     <li><a href="<?php echo BASE_URL; ?>index.php#servicios" style="text-decoration: none; color: #333; font-weight: 500;">Tratamientos</a></li>
                     <li><a href="<?php echo BASE_URL; ?>tienda/index.php" style="text-decoration: none; color: #333; font-weight: 500;">Productos</a></li>
                 </ul>
