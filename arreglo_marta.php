@@ -18,7 +18,7 @@ try {
     // Verificamos si realmente se cambió algo
     if ($stmt->rowCount() > 0) {
         echo "<h2 style='color: green;'>¡Éxito! La contraseña de Marta ha sido reparada y encriptada correctamente.</h2>";
-        echo "<p>Su nueva contraseña es: <strong>marta123</strong></p>";
+        echo "<p>Su nueva contraseña es: <strong>Marta123</strong></p>";
         echo "<a href='auth/login.php'>Ir al Login para probar</a>";
     } else {
         echo "<h2 style='color: red;'>Error: No se encontró a nadie con el correo '$email_marta'.</h2>";
