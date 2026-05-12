@@ -20,13 +20,12 @@ $id_perfil_actual = $_SESSION['user_id'];
 try {
     $sql = "SELECT 
                 id_cita, fecha_hora, estado, precio_final,
-                (SELECT nombre FROM Usuario WHERE id_perfil = Citas.id_perfil) AS cliente,
-                (SELECT apellido FROM Usuario WHERE id_perfil = Citas.id_perfil) AS cliente_apellido,
-                (SELECT telefono FROM Usuario WHERE id_perfil = Citas.id_perfil) AS cliente_telefono,
-                (SELECT nombre FROM Servicios WHERE id_servicio = Citas.id_servicio) AS servicio,
-                (SELECT nombre FROM Trabajadores WHERE id_trabajador = Citas.id_trabajador) AS especialista
-            FROM Citas";
-
+                (SELECT nombre FROM Usuario WHERE id_perfil = c.id_perfil) AS cliente,
+                (SELECT apellido FROM Usuario WHERE id_perfil = c.id_perfil) AS cliente_apellido,
+                (SELECT telefono FROM Usuario WHERE id_perfil = c.id_perfil) AS cliente_telefono,
+                (SELECT nombre FROM Servicios WHERE id_servicio = c.id_servicio) AS servicio,
+                (SELECT nombre FROM Trabajadores WHERE id_trabajador = c.id_trabajador) AS especialista
+            FROM Citas c";
     if ($rol_actual === 'trabajador') {
         $sql .= " WHERE id_trabajador = (SELECT id_trabajador FROM Trabajadores WHERE id_perfil = ?)";
         $sql .= " ORDER BY fecha_hora ASC";
@@ -113,7 +112,7 @@ include '../includes/header.php';
                             <?php endif; ?>
                             <td style="padding: 15px 20px;">
                                 <?php 
-                                    $bg = '#F39C12'; // Pendiente
+                                    $bg = '#F39C12';
                                     if ($cita['estado'] == 'Completado') $bg = '#27AE60'; 
                                     if ($cita['estado'] == 'Cancelado') $bg = '#E74C3C'; 
                                 ?>
