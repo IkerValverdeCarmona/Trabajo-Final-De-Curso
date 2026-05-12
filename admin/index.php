@@ -49,6 +49,15 @@ include '../includes/header.php';
             </div>
             <div class="enlace-destacado">Gestionar Stock →</div>
         </a>
+        
+        <a href="admin_servicios.php" class="tarjeta-dashboard">
+            <div>
+                <div class="icono-grande">✨</div>
+                <h2 style="font-family: var(--font-title); margin-bottom: 15px;">Tratamientos</h2>
+                <p class="text-muted">Gestiona el catálogo de masajes, ajusta sus duraciones, precios y dálos de alta o baja.</p>
+            </div>
+            <div class="enlace-destacado">Gestionar Tratamientos →</div>
+        </a>
 
     </div>
 
