@@ -2,7 +2,7 @@
 session_start(); 
 require_once 'includes/db.php'; 
 require_once 'includes/header.php';
-$stmt = $pdo->query("SELECT * FROM Servicios WHERE activo = 1");
+$stmt = $pdo->query("SELECT * FROM Servicios WHERE activo = 1 ORDER BY RAND() LIMIT 4");
 $servicios = $stmt->fetchAll();
 ?>
 
@@ -39,13 +39,17 @@ $servicios = $stmt->fetchAll();
 
 <section class="services-section" id="servicios">
     <div class="section-header">
-        <h2>Nuestros Tratamientos</h2>
-        <p>Selecciona el masaje que mejor se adapte a tus necesidades</p>
+        <h2>Tratamientos Destacados</h2>
+        <p>Descubre algunas de nuestras terapias (selección aleatoria)</p>
     </div>
+    
     <div class="services-grid">
         <?php foreach ($servicios as $servicio): ?>
             <div class="service-card">
                 <div>
+                    <div style="margin-bottom: 15px;">
+                        <span class="etiqueta-estado estado-completado" style="background: #E8F5E9; color: #2E7D32;">✨ Recomendado</span>
+                    </div>
                     <h3><?php echo htmlspecialchars($servicio['nombre']); ?></h3>
                     <p><?php echo htmlspecialchars($servicio['descripcion']); ?></p>
                     <div style="margin-bottom: 20px;">
@@ -62,6 +66,12 @@ $servicios = $stmt->fetchAll();
                 </a>
             </div>
         <?php endforeach; ?>
+    </div>
+
+    <div style="text-align: center; margin-top: 50px;">
+        <a href="tienda/index.php#tratamientos" class="btn btn-primary">
+            Ver todos los tratamientos
+        </a>
     </div>
 </section>
 </main>
