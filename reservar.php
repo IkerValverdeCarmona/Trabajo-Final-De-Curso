@@ -10,7 +10,6 @@ $id_perfil_actual = $_SESSION['user_id'];
 $mensaje = "";
 $margen_limpieza = 5;
 
-// (Toda tu lógica PHP de fechas y horas intacta...)
 function obtenerHorasOcupadas($pdo, $id_trabajador, $fecha) {
     $sql = "SELECT DATE_FORMAT(fecha_hora, '%H:%i') FROM Citas WHERE id_trabajador = ? AND DATE(fecha_hora) = ? AND estado != 'Cancelada'";
     $stmt = $pdo->prepare($sql);
@@ -58,9 +57,25 @@ if ($id_trabajador && $id_servicio) {
 if (isset($_POST['confirmar'])) {
     try {
         $fecha_hora_formateada = $_POST['fecha'] . ' ' . $_POST['hora'] . ':00';
-        $sql = "INSERT INTO Citas (id_perfil, id_trabajador, id_servicio, fecha_hora, precio_final, estado) VALUES (?, ?, ?, ?, ?, 'Pendiente')";
+        
+        // 1. Capturamos la nota del cliente y la saneamos
+        $notas_cliente = isset($_POST['notas_cliente']) ? trim($_POST['notas_cliente']) : '';
+
+        // 2. Añadimos 'notas_cliente' a la consulta SQL
+        $sql = "INSERT INTO Citas (id_perfil, id_trabajador, id_servicio, fecha_hora, precio_final, estado, notas_cliente) 
+                VALUES (?, ?, ?, ?, ?, 'Pendiente', ?)";
+        
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id_perfil_actual, $_POST['id_trabajador'], $_POST['id_servicio'], $fecha_hora_formateada, $precio_servicio]);
+        
+        // 3. Pasamos el valor al array del execute (en el mismo orden que los '?')
+        $stmt->execute([
+            $id_perfil_actual, 
+            $_POST['id_trabajador'], 
+            $_POST['id_servicio'], 
+            $fecha_hora_formateada, 
+            $precio_servicio,
+            htmlspecialchars($notas_cliente) // Guardamos con seguridad
+        ]);
         
         $_SESSION['mensaje_exito'] = "¡Reserva confirmada con éxito! Te esperamos el " . date('d/m/Y', strtotime($_POST['fecha'])) . " a las " . $_POST['hora'] . ".";
         header("Location: mis_citas.php");
@@ -139,6 +154,18 @@ include 'includes/header.php';
                         </select>
                         <span style="font-size: 0.8rem; color: #888; margin-top: 5px; display: block;">* Incluye 5 min de margen sanitario.</span>
                     </div>
+                    <div class="mb-3" style="margin-top: 20px;">
+                        <label for="notas_cliente" class="form-label" style="font-weight: 600;">Notas para el terapeuta</label>
+                        <textarea 
+                            class="form-control" 
+                            id="notas_cliente" 
+                            name="notas_cliente" 
+                            rows="3" 
+                            placeholder="Indica si tienes alguna lesión, alergia o preferencia para el tratamiento..."
+                            style="border-radius: 12px; border: 1px solid #ddd; padding: 12px;"
+                        ></textarea>
+                        <small class="text-muted">Opcional: Esta información ayudará a personalizar tu masaje.</small>
+                    </div>
 
                     <button type="submit" name="confirmar" class="btn btn-primary boton-enviar">Confirmar y Pagar en Centro</button>
                 <?php endif; ?>
@@ -146,5 +173,4 @@ include 'includes/header.php';
         </form>
     </div>
 </main>
-
 <?php include 'includes/footer.php'; ?>

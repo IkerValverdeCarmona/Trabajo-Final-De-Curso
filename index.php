@@ -2,7 +2,7 @@
 session_start(); 
 require_once 'includes/db.php'; 
 require_once 'includes/header.php';
-$stmt = $pdo->query("SELECT * FROM Servicios WHERE activo = 1 ORDER BY RAND() LIMIT 4");
+$stmt = $pdo->query("SELECT * FROM Servicios ORDER BY RAND() LIMIT 4;");
 $servicios = $stmt->fetchAll();
 ?>
 <section class="hero-section" id="inicio">
