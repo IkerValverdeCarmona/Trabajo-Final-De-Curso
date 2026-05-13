@@ -1,10 +1,12 @@
 <?php
 session_start();
 require_once '../includes/db.php';
+
 if (!isset($_SESSION['rol']) || ($_SESSION['rol'] !== 'admin' && $_SESSION['rol'] !== 'trabajador')) {
     header("Location: ../index.php");
     exit;
 }
+
 if (isset($_GET['id_cita']) && isset($_GET['nuevo_estado'])) {
     try {
         $updateStmt = $pdo->prepare("UPDATE Citas SET estado = ? WHERE id_cita = ?");
@@ -15,17 +17,21 @@ if (isset($_GET['id_cita']) && isset($_GET['nuevo_estado'])) {
         $error_estado = "Error al actualizar la cita.";
     }
 }
+
 $rol_actual = $_SESSION['rol'];
 $id_perfil_actual = $_SESSION['user_id'];
+
 try {
+    // AÑADIDO: notas_cliente en la primera línea del SELECT
     $sql = "SELECT 
-                id_cita, fecha_hora, estado, precio_final,
+                id_cita, fecha_hora, estado, precio_final, notas_cliente,
                 (SELECT nombre FROM Usuario WHERE id_perfil = c.id_perfil) AS cliente,
                 (SELECT apellido FROM Usuario WHERE id_perfil = c.id_perfil) AS cliente_apellido,
                 (SELECT telefono FROM Usuario WHERE id_perfil = c.id_perfil) AS cliente_telefono,
                 (SELECT nombre FROM Servicios WHERE id_servicio = c.id_servicio) AS servicio,
                 (SELECT nombre FROM Trabajadores WHERE id_trabajador = c.id_trabajador) AS especialista
             FROM Citas c";
+            
     if ($rol_actual === 'trabajador') {
         $sql .= " WHERE id_trabajador = (SELECT id_trabajador FROM Trabajadores WHERE id_perfil = ?)";
         $sql .= " ORDER BY fecha_hora ASC";
@@ -87,6 +93,7 @@ include '../includes/header.php';
                     </tr>
                 <?php else: ?>
                     <?php foreach ($citas as $cita): ?>
+                    
                         <tr style="border-bottom: 1px solid #f9f9f9; transition: background 0.3s;" onmouseover="this.style.background='#fffcf8'" onmouseout="this.style.background='transparent'">
                             <td style="padding: 15px 20px; color: #666; font-size: 0.9rem;">
                                 <strong><?php echo date('d/m/Y', strtotime($cita['fecha_hora'])); ?></strong><br>
@@ -100,11 +107,24 @@ include '../includes/header.php';
                                     <?php echo htmlspecialchars($cita['cliente_telefono'] ?? ''); ?>
                                 </div>
                             </td>
+                            
                             <td style="padding: 15px 20px; color: #555;">
-                                <span style="background: #f0f0f0; padding: 4px 10px; border-radius: 8px; font-size: 0.85rem;">
+                                <span style="background: #f0f0f0; padding: 4px 10px; border-radius: 8px; font-size: 0.85rem; display: inline-block;">
                                     <?php echo htmlspecialchars($cita['servicio']); ?>
                                 </span>
+                                
+                                <?php if (!empty($cita['notas_cliente'])): ?>
+                                    <details style="margin-top: 10px; font-size: 0.85rem; background: #FFF7EE; padding: 8px; border-radius: 8px; border: 1px dashed #EB6250;">
+                                        <summary style="cursor: pointer; color: #EB6250; font-weight: 600; outline: none;">
+                                            📝 Ver notas
+                                        </summary>
+                                        <p style="margin: 8px 0 0 0; color: #666; font-style: italic;">
+                                            "<?php echo nl2br(htmlspecialchars($cita['notas_cliente'])); ?>"
+                                        </p>
+                                    </details>
+                                <?php endif; ?>
                             </td>
+                            
                             <?php if($rol_actual === 'admin'): ?>
                                 <td style="padding: 15px 20px; color: #666; font-size: 0.9rem;">
                                     <?php echo htmlspecialchars($cita['especialista'] ?? 'Sin asignar'); ?>
