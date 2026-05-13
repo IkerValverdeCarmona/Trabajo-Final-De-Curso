@@ -2,7 +2,15 @@
 session_start(); 
 require_once 'includes/db.php'; 
 require_once 'includes/header.php';
-$stmt = $pdo->query("SELECT * FROM Servicios GROUP BY nombre ORDER BY RAND() LIMIT 4;");
+$sql = "SELECT * FROM Servicios WHERE id_servicio IN (
+            SELECT MIN(id_servicio) 
+            FROM Servicios 
+            GROUP BY nombre
+        ) 
+        ORDER BY RAND() 
+        LIMIT 4";
+
+$stmt = $pdo->query($sql);
 $servicios = $stmt->fetchAll();
 ?>
 <section class="hero-section" id="inicio">
