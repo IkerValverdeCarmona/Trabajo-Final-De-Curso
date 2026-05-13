@@ -901,7 +901,7 @@ label {
 .footer-title { font-family: var(--font-title); color: var(--color-primary); margin-bottom: 5px; font-size: 1.8rem; font-weight: 700; }
 .footer-subtitle { color: #555; font-size: 1rem; font-weight: 500; }
 .footer-contact { display: flex; flex-direction: column; gap: 10px; color: #666; font-size: 0.95rem; }
-.footer-contact-item { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0; text-decoration: none;}
+.footer-contact-item { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0; text-decoration: none; color: #666;}
 .footer-social { display: flex; gap: 15px; margin-top: 10px; }
 .social-icon { color: var(--color-primary); transition: transform 0.3s ease; display: inline-block; }
 .social-icon:hover { transform: scale(1.1); }
