@@ -47,7 +47,7 @@ $servicios = $stmt->fetchAll();
 <section class="services-section" id="servicios">
     <div class="section-header">
         <h2>Tratamientos Destacados</h2>
-        <p>Descubre algunas de nuestras terapias (selección aleatoria)</p>
+        <p>Descubre algunas de nuestras terapias</p>
     </div>
     
     <div class="services-grid">
