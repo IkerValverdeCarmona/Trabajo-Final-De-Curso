@@ -2,8 +2,6 @@
 session_start(); 
 require_once 'includes/db.php'; 
 require_once 'includes/header.php';
-
-// 1. Obtener Servicios
 $sql = "SELECT * FROM Servicios WHERE id_servicio IN (
             SELECT MIN(id_servicio) 
             FROM Servicios 
@@ -14,6 +12,7 @@ $sql = "SELECT * FROM Servicios WHERE id_servicio IN (
 
 $stmt = $pdo->query($sql);
 $servicios = $stmt->fetchAll();
+
 $sqlOpiniones = "SELECT * FROM Opiniones WHERE visible = 1 ORDER BY fecha_publicacion DESC LIMIT 3";
 $stmtOpiniones = $pdo->prepare($sqlOpiniones);
 $stmtOpiniones->execute();
@@ -37,7 +36,7 @@ foreach ($opinionesBrutas as $opinion) {
         'nombre_completo' => ($datosUsuario['nombre'] ?? 'Usuario') . ' ' . ($datosUsuario['apellido'] ?? ''),
         'nombre_servicio' => $datosServicio['nombre'] ?? 'Tratamiento General'
     ];
-}
+    }
 ?>
 <section class="hero-section" id="inicio">
     <div class="hero-content">
