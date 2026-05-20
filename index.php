@@ -2,6 +2,8 @@
 session_start(); 
 require_once 'includes/db.php'; 
 require_once 'includes/header.php';
+
+// 1. Obtener Servicios
 $sql = "SELECT * FROM Servicios WHERE id_servicio IN (
             SELECT MIN(id_servicio) 
             FROM Servicios 
@@ -12,15 +14,14 @@ $sql = "SELECT * FROM Servicios WHERE id_servicio IN (
 
 $stmt = $pdo->query($sql);
 $servicios = $stmt->fetchAll();
-
-$sqlOpiniones = "SELECT * FROM Opiniones WHERE visible = 1 ORDER BY fecha_publica DESC LIMIT 3";
-$stmtOpiniones = $pdo-> prepare($sqlOpiniones);
+$sqlOpiniones = "SELECT * FROM Opiniones WHERE visible = 1 ORDER BY fecha_publicacion DESC LIMIT 3";
+$stmtOpiniones = $pdo->prepare($sqlOpiniones);
 $stmtOpiniones->execute();
 $opinionesBrutas = $stmtOpiniones->fetchAll(PDO::FETCH_ASSOC);
 
 $resenasFormateadas = [];
 foreach ($opinionesBrutas as $opinion) {
-    $sqlUsuario = "SELECT nombre,apellido FROM Usuario WHERE id_pefil =:id_perfil";
+    $sqlUsuario = "SELECT nombre, apellido FROM Usuario WHERE id_perfil = :id_perfil";
     $stmtUsuario = $pdo->prepare($sqlUsuario);
     $stmtUsuario->execute(['id_perfil' => $opinion['id_perfil']]);
     $datosUsuario = $stmtUsuario->fetch(PDO::FETCH_ASSOC);
@@ -30,13 +31,13 @@ foreach ($opinionesBrutas as $opinion) {
     $stmtServicio->execute(['id_servicio' => $opinion['id_servicio']]);
     $datosServicio = $stmtServicio->fetch(PDO::FETCH_ASSOC);
 
-    $resenasFormateadas[]=[
-        'puntacion' => $opinion['puntuacion'],
+    $resenasFormateadas[] = [
+        'puntuacion' => $opinion['puntuacion'], 
         'comentario' => $opinion['comentario'],
         'nombre_completo' => ($datosUsuario['nombre'] ?? 'Usuario') . ' ' . ($datosUsuario['apellido'] ?? ''),
         'nombre_servicio' => $datosServicio['nombre'] ?? 'Tratamiento General'
     ];
-    }
+}
 ?>
 <section class="hero-section" id="inicio">
     <div class="hero-content">
