@@ -58,7 +58,14 @@ include '../includes/header.php';
             </div>
             <div class="enlace-destacado">Gestionar Tratamientos →</div>
         </a>
-
+        <a href="admin_gestionar_resenas.php" class="tarjeta-dashboard">
+            <div>
+                <div class="icono-grande">⭐</div>
+                <h2 style="font-family: var(--font-title); margin-bottom: 15px;">Gestión de Reseñas</h2>
+                <p class="text-muted">Revisa las opiniones de tus clientes, aprueba los comentarios para que sean públicos o elimina los inadecuados.</p>
+            </div>
+            <div class="enlace-destacado">Gestionar Reseñas →</div>
+        </a>
     </div>
 
     <div class="consejo-gestion">
