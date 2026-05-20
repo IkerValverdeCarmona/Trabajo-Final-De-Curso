@@ -1,5 +1,6 @@
 <?php
-define('BASE_URL', 'https://' . $_SERVER['HTTP_HOST'] . '/');
+$protocolo = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
+define('BASE_URL', $protocolo . '://' . $_SERVER['HTTP_HOST'] . '/');
 $host = 'localhost';
 $db   = 'LcQuiromasajes';
 $user = 'root';
