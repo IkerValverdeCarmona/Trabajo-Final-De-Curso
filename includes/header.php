@@ -39,6 +39,7 @@ if (isset($_SESSION['carrito'])) {
                     <li><a href="<?php echo BASE_URL; ?>index.php">Inicio</a></li>
                     <li><a href="<?php echo BASE_URL; ?>tienda/index.php#tratamientos">Tratamientos</a></li>
                     <li><a href="<?php echo BASE_URL; ?>tienda/index.php#productos">Productos</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>resenas.php">Reseñas</a></li>
                 </ul>
             </nav>
 
@@ -77,7 +78,6 @@ if (isset($_SESSION['carrito'])) {
                                 <a href="<?php echo BASE_URL; ?>mis_citas.php">📅 Mis Citas</a>
                                 <a href="<?php echo BASE_URL; ?>mis_pedidos.php">🛍️ Mis Pedidos</a>
                                 <a href="<?php echo BASE_URL; ?>perfil.php">👤 Mi Perfil</a> 
-                                <a href="<?php echo BASE_URL; ?>resenas.php">Reseñas</a>
                             </div>
                             
                             <?php if(isset($_SESSION['rol']) && ($_SESSION['rol'] === 'admin' || $_SESSION['rol'] === 'trabajador')): ?>

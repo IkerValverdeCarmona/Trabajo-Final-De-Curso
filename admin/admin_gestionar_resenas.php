@@ -10,16 +10,22 @@ if (!isset($_SESSION['user_id']) || ($_SESSION['rol'] !== 'admin' && $_SESSION['
 
 // Lógica de aprobación o eliminación
 if (isset($_GET['aprobar'])) {
-    $stmt = $pdo->prepare("UPDATE Opiniones SET visible = 1 WHERE id = ?");
+    // CORREGIDO: id_opinion
+    $stmt = $pdo->prepare("UPDATE Opiniones SET visible = 1 WHERE id_opinion = ?");
     $stmt->execute([$_GET['aprobar']]);
+    header("Location: admin_gestionar_resenas.php"); // Redirección para limpiar la URL
+    exit;
 }
 if (isset($_GET['eliminar'])) {
-    $stmt = $pdo->prepare("DELETE FROM Opiniones WHERE id = ?");
+    // CORREGIDO: id_opinion
+    $stmt = $pdo->prepare("DELETE FROM Opiniones WHERE id_opinion = ?");
     $stmt->execute([$_GET['eliminar']]);
+    header("Location: admin_gestionar_resenas.php");
+    exit;
 }
 
 include '../includes/header.php';
-$resenas = $pdo->query("SELECT * FROM Opiniones ORDER BY id DESC")->fetchAll();
+$resenas = $pdo->query("SELECT * FROM Opiniones ORDER BY id_opinion DESC")->fetchAll();
 ?>
 
 <div class="contenedor-admin" style="padding: 40px;">
@@ -31,14 +37,13 @@ $resenas = $pdo->query("SELECT * FROM Opiniones ORDER BY id DESC")->fetchAll();
         <tbody>
             <?php foreach ($resenas as $r): ?>
             <tr>
-                <td><?= htmlspecialchars($r['nombre_cliente']) ?></td>
-                <td><?= htmlspecialchars($r['comentario']) ?></td>
+                <td><?= htmlspecialchars($r['id_perfil']) ?></td> <td><?= htmlspecialchars($r['comentario']) ?></td>
                 <td><?= $r['visible'] ? '✅ Visible' : '⏳ Pendiente' ?></td>
                 <td>
                     <?php if (!$r['visible']): ?>
-                        <a href="?aprobar=<?= $r['id'] ?>" class="btn btn-sm btn-success">Aprobar</a>
+                        <a href="?aprobar=<?= $r['id_opinion'] ?>" class="btn btn-sm btn-success">Aprobar</a>
                     <?php endif; ?>
-                    <a href="?eliminar=<?= $r['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro?')">Borrar</a>
+                    <a href="?eliminar=<?= $r['id_opinion'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro?')">Borrar</a>
                 </td>
             </tr>
             <?php endforeach; ?>
