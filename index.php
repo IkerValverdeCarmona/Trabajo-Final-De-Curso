@@ -12,31 +12,6 @@ $sql = "SELECT * FROM Servicios WHERE id_servicio IN (
 
 $stmt = $pdo->query($sql);
 $servicios = $stmt->fetchAll();
-
-$sqlOpiniones = "SELECT * FROM Opiniones WHERE visible = 1 ORDER BY fecha_publicacion DESC LIMIT 3";
-$stmtOpiniones = $pdo->prepare($sqlOpiniones);
-$stmtOpiniones->execute();
-$opinionesBrutas = $stmtOpiniones->fetchAll(PDO::FETCH_ASSOC);
-
-$resenasFormateadas = [];
-foreach ($opinionesBrutas as $opinion) {
-    $sqlUsuario = "SELECT nombre, apellido FROM Usuario WHERE id_perfil = :id_perfil";
-    $stmtUsuario = $pdo->prepare($sqlUsuario);
-    $stmtUsuario->execute(['id_perfil' => $opinion['id_perfil']]);
-    $datosUsuario = $stmtUsuario->fetch(PDO::FETCH_ASSOC);
-
-    $sqlServicio = "SELECT nombre FROM Servicios WHERE id_servicio = :id_servicio";
-    $stmtServicio = $pdo->prepare($sqlServicio);
-    $stmtServicio->execute(['id_servicio' => $opinion['id_servicio']]);
-    $datosServicio = $stmtServicio->fetch(PDO::FETCH_ASSOC);
-
-    $resenasFormateadas[] = [
-        'puntuacion' => $opinion['puntuacion'], 
-        'comentario' => $opinion['comentario'],
-        'nombre_completo' => ($datosUsuario['nombre'] ?? 'Usuario') . ' ' . ($datosUsuario['apellido'] ?? ''),
-        'nombre_servicio' => $datosServicio['nombre'] ?? 'Tratamiento General'
-    ];
-    }
 ?>
 <section class="hero-section" id="inicio">
     <div class="hero-content">
@@ -107,43 +82,4 @@ foreach ($opinionesBrutas as $opinion) {
     </div>
 </section>
 </main>
-<section class="container my-5">
-    <h2 class="text-center mb-4" style="font-family: 'Playfair Display', serif;">Lo que dicen nuestros clientes</h2>
-    
-    <div class="row">
-        <?php foreach ($resenasFormateadas as $resena): ?>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 border-0" style="background-color: #FFFFFF; border-radius: 20px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);">
-                    <div class="card-body p-4" style="font-family: 'Poppins', sans-serif;">
-                        
-                        <div class="mb-3" style="color: #EB6250;">
-                            <?php 
-                            for ($i = 0; $i < 5; $i++) {
-                                if ($i < $resena['puntuacion']) {
-                                    echo '<i class="bi bi-star-fill"></i>'; 
-                                } else {
-                                    echo '<i class="bi bi-star"></i>';
-                                }
-                            }
-                            ?>
-                        </div>
-
-                        <p class="card-text text-muted" style="line-height: 1.6;">
-                            "<?= htmlspecialchars($resena['comentario']) ?>"
-                        </p>
-                        
-                    </div>
-                    <div class="card-footer bg-transparent border-0 px-4 pb-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <strong><?= htmlspecialchars($resena['nombre_completo']) ?></strong>
-                            <small class="text-muted" style="font-size: 0.8rem;">
-                                <?= htmlspecialchars($resena['nombre_servicio']) ?>
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-</section>
 <?php include 'includes/footer.php'; ?>
