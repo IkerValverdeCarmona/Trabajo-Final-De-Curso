@@ -105,8 +105,6 @@ if (isset($_SESSION['carrito'])) {
                 </div>
 
             <?php endif; ?>
-
-            <!-- Botón hamburguesa (solo móvil) -->
             <button id="mobileMenuToggle" class="btn-menu-movil" aria-label="Abrir menú">
                 <span></span>
                 <span></span>
@@ -119,14 +117,13 @@ if (isset($_SESSION['carrito'])) {
 
 <script>
 (function () {
-    // Dropdown usuario
     var btnUser   = document.getElementById('userMenuBtn');
     var menuUser  = document.getElementById('userDropdown');
 
     if (btnUser && menuUser) {
         btnUser.addEventListener('click', function (e) {
             e.stopPropagation();
-            menuUser.classList.toggle('show');
+            menuUser.classList.toggle('show'); 
         });
     }
 
