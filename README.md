@@ -1,167 +1,270 @@
 # LC Quiromasajes — Proyecto Final DAW
 
-Aplicación web desarrollada en **PHP + MySQL** para la gestión de un centro de quiromasaje. Permite mostrar tratamientos, registrar/iniciar sesión de usuarios, consultar perfil, visualizar citas y disponer de un panel básico de administración.
+Aplicación web desarrollada en **PHP + MySQL** para la gestión integral de un centro de quiromasajes y bienestar.
 
-## 1) Objetivo del proyecto
+El sistema permite gestionar reservas, usuarios, productos, citas y administración interna mediante una plataforma web moderna, responsive y optimizada para producción.
 
-Este proyecto implementa una base funcional para un sistema de reservas y gestión de clientes orientado a un centro de bienestar.
+---
 
-Funcionalidades principales:
+# 📌 Objetivo del proyecto
 
-- Catálogo público de servicios (tratamientos activos).
-- Registro e inicio de sesión con roles (`usuario`, `admin`, `trabajador`).
-- Zona privada de cliente con perfil y listado de citas.
-- Panel de administración con tabla de citas y datos cruzados.
-- Endpoint para consultar horas ocupadas por fecha (JSON).
-- Esquema SQL completo para levantar la base de datos.
+El objetivo principal del proyecto es digitalizar la gestión de un centro de bienestar mediante una aplicación web accesible, intuitiva y escalable.
 
-## 2) Stack tecnológico
+La plataforma permite:
 
-- **Backend:** PHP (PDO para acceso a datos).
-- **Base de datos:** MySQL
-- **Frontend:** HTML, CSS, JavaScript vanilla.
-- **Servidor recomendado en local:** XAMPP, WAMP o LAMP.
+- Mostrar tratamientos y servicios.
+- Gestionar reservas online.
+- Registro e inicio de sesión.
+- Gestión de perfil de cliente.
+- Gestión de citas.
+- Tienda online de productos.
+- Panel de administración.
+- Gestión de trabajadores y clientes.
+- Sistema de opiniones y reseñas.
 
-## 3) Estructura del proyecto
+---
+
+# 🛠 Stack tecnológico
+
+## Backend
+- PHP 8
+- PDO (PHP Data Objects)
+
+## Base de datos
+- MySQL / MariaDB
+
+## Frontend
+- HTML5
+- CSS3
+- JavaScript Vanilla
+- Bootstrap 5
+
+## Hosting
+- InfinityFree
+
+## Entorno de desarrollo
+- XAMPP
+
+---
+
+# 📂 Estructura actual del proyecto
 
 ```text
 .
-├── index.php                    # Home + listado de servicios activos
-├── formulario.php               # Formulario de contacto
-├── procesar_contacto.php        # Procesamiento del formulario de contacto
-├── mis_citas.php                # Área privada con citas del usuario logueado
-├── perfil.php                   # Área privada con datos del perfil
-├── admin.php                    # Panel de administración (solo admin)
-├── obtener_horas.php            # Endpoint JSON de horas ocupadas
+├── index.php
+├── perfil.php
+├── mis_citas.php
+├── mis_pedidos.php
+├── resenas.php
+├── formulario.php
+├── obtener_horas.php
+├── cancelar_cita.php
+├── procesar_contacto.php
+├── procesar_resena.php
+├── reservar.php
+├── admin/
+│   ├── index.php
+│   ├── admin_citas.php
+│   ├── admin_productos.php
+│   ├── admin_servicios.php
+│   ├── actualizar_estado.php
+│   ├── admin_pedidos.php
+│   ├── eliminar_cita.php
+│   ├── gestionar_cita.php
+│   ├── nuevo_producto.php
+│   ├── nuevo_servicio.php    
+│   └── admin_gestion_resenas.php
+│
+├── auth/
+│   ├── login.php
+│   ├── registro.php
+│   ├── logout.php
+│   ├── google_callback.php
+│   ├── procesar_login.php
+│   ├── procesar_registro.php
+│   └── procesar_auth.php
+│
+├── tienda/
+│   ├── index.php
+│   ├── carrito.php
+│   └── procesar_reserva.php
+│
 ├── includes/
-│   ├── db.php                   # Conexión PDO a MySQL
-│   ├── header.php               # Cabecera/navegación común
-│   └── footer.php               # Pie común + carga de JS
-├── Login/
-│   ├── index.html               # Formulario login/registro
-│   ├── procesar_auth.php        # Lógica de autenticación y alta de cuenta
-│   └── logout.php               # Cierre de sesión
+│   ├── db.php
+│   ├── header.php
+│   ├── footer.php
+│   └── google_config.php
+│
 ├── assets/
-│   ├── css/style.css            # Estilos globales
-│   └── js/script.js             # Interacciones front (navbar, menú, etc.)
-└── bbdd/LcQuiromasajes.sql      # Esquema + datos semilla
-```
+│   ├── css/
+│   │   └── style.css
+│   │
+│   ├── js/
+│   │   └── script.js
+│   │
+│   └── img/
+│
+├── bbdd/
+│   ├──backup_lcquiromasajes.sql
+│   └── LcQuiromasajes.sql
+│
+└── README.md
+⚙️ Requisitos previos
 
-## 4) Requisitos previos
+Para ejecutar el proyecto en local se necesita:
 
-1. PHP 8.x (recomendado, compatible con PDO MySQL).
-2. MySQL 8.x o MariaDB equivalente.
-3. Servidor web (Apache/Nginx) o entorno integrado (XAMPP).
+PHP 8 o superior
+MySQL 8 o MariaDB
+Apache o Nginx
+XAMPP (recomendado)
+🚀 Instalación local
+1. Clonar o copiar el proyecto
 
-## 5) Instalación y puesta en marcha
+Colocar el proyecto dentro de:
 
-### Paso 1 — Clonar o copiar el proyecto
+htdocs/
 
-Ubica esta carpeta dentro del directorio servido por tu servidor web (por ejemplo, `htdocs` en XAMPP).
+si se utiliza XAMPP.
 
-### Paso 2 — Crear la base de datos
+Ejemplo:
 
-Importa el script SQL:
+C:/xampp/htdocs/LcQuiromasajes
+2. Crear la base de datos
 
-- Archivo: `bbdd/LcQuiromasajes.sql`
-- Crea la BD `LcQuiromasajes`, tablas y datos iniciales.
+Importar:
 
-Ejemplo por CLI:
+bbdd/LcQuiromasajes.sql -- sin datos
+bbdd/backup_lcquiromasajes -- datos de ejemplo
 
-```bash
-mysql -u root -p < bbdd/LcQuiromasajes.sql
-```
+Esto creará:
 
-### Paso 3 — Configurar conexión
+tablas,
+relaciones,
+datos de ejemplo,
+usuarios iniciales.
 
-Edita `includes/db.php` si tus credenciales no son las de desarrollo:
+3. Configurar conexión MySQL
 
-- Host: `localhost`
-- Base de datos: `LcQuiromasajes`
-- Usuario: `root`
-- Password: `''` (vacío en local por defecto del proyecto)
+Editar:
 
-### Paso 4 — Ejecutar en navegador
+includes/db.php
 
-Abre la URL del proyecto, por ejemplo:
+Configurar:
 
-```text
-http://localhost/Trabajo-Final-De-Curso/index.php
-```
+$host = "localhost";
+$dbname = "LcQuiromasajes";
+$user = "root";
+$password = "1234";
+4. Ejecutar el proyecto
 
-## 6) Modelo de datos (resumen)
+Abrir:
 
-El script SQL define entidades de autenticación, personas, servicios, operaciones y feedback.
+http://localhost/LcQuiromasajes/
 
-Tablas clave:
+🌐 Despliegue online (InfinityFree)
 
-- **`Perfil`**: credenciales, email único y rol del usuario.
-- **`Usuario`**: datos de cliente vinculados a `Perfil`.
-- **`Trabajadores`** y **`Administrador`**: especializaciones por rol.
-- **`Servicios`**: catálogo de tratamientos con duración/precio/estado activo.
-- **`Citas`**: reservas con fecha/hora, estado y precio final.
-- **`Producto`** + **`Opera`**: módulo de venta (estructura preparada).
-- **`Opiniones`**: reseñas/comentarios.
+El proyecto está preparado para desplegarse en:
 
-## 7) Flujo funcional por pantallas
+InfinityFree
 
-### Inicio (`index.php`)
+Configuración utilizada
+Hosting
+InfinityFree Free Hosting
+Base de datos
+MySQL proporcionado por InfinityFree
+Carpeta pública
+htdocs/
+Configuración de conexión en producción
 
-- Carga servicios activos desde la tabla `Servicios`.
-- Muestra CTA para explorar tratamientos e iniciar reserva.
+Ejemplo:
 
-### Login/Registro (`Login/index.html` + `Login/procesar_auth.php`)
+$host = "sqlXXX.infinityfree.com";
+$dbname = "if0_XXXXXXXX_LcQuiromasajes";
+$user = "if0_XXXXXXXX";
+$password = "********";
+👥 Roles del sistema
+Invitado
+Ver tratamientos
+Ver productos
+Registrarse
+Iniciar sesión
+Usuario
+Reservar citas
+Ver perfil
+Gestionar pedidos
+Ver historial
+Trabajador
+Gestión de citas asignadas
+Administrador
+Gestión completa del sistema
+Gestión de usuarios
+Gestión de productos
+Gestión de servicios
+Gestión de trabajadores
+🔒 Seguridad implementada
+Hash de contraseñas con password_hash
+Validación de sesiones
+Control de acceso por roles
+Consultas preparadas PDO
+Escape de salida con htmlspecialchars
+📱 Responsive Design
 
-- Registro: crea entrada en `Perfil` y automáticamente un `Usuario` básico.
-- Login: valida hash con `password_verify` y crea sesión.
-- Redirección por rol:
-  - `admin` → `admin.php`
-  - resto → `index.php`
+La aplicación está optimizada para:
 
-### Perfil y citas (`perfil.php`, `mis_citas.php`)
+móviles,
+tablets,
+escritorio.
 
-- Requieren sesión activa.
-- `perfil.php` muestra email y tipo de cuenta.
-- `mis_citas.php` lista citas del usuario con JOIN a servicio y especialista.
+Incluye:
 
-### Administración (`admin.php`)
+menú hamburguesa,
+diseño adaptable,
+navegación responsive,
+optimización visual móvil.
+📌 Funcionalidades principales
+Sistema de autenticación
+Registro
+Login
+Logout
+Roles
+Gestión de citas
+Visualización
+Reserva
+Horas ocupadas dinámicas
+Tienda online
+Productos
+Carrito
+Checkout
+Administración
+CRUD de servicios
+CRUD de productos
+Gestión de usuarios
+Gestión de trabajadores
+🔮 Mejoras futuras
+Pasarela de pago Stripe/PayPal
+Sistema de emails automáticos
+Calendario interactivo
+Notificaciones
+Panel estadístico
+API REST
+Sistema de cupones
+📚 Proyecto académico
 
-- Restringido a sesiones con `permiso = admin`.
-- Lista citas con cliente, servicio, trabajador, estado y total.
+Proyecto realizado como Trabajo Final de Grado Superior en:
 
-### Horas ocupadas (`obtener_horas.php`)
+Desarrollo de Aplicaciones Web (DAW)
 
-- Endpoint GET por fecha (`?fecha=YYYY-MM-DD`).
-- Devuelve JSON con horas reservadas no canceladas.
+Centro educativo:
+(añadir instituto)
 
-## 8) Roles y control de acceso
+Curso:
+(añadir curso académico)
 
-- **Invitado:** puede ver home y formulario de contacto.
-- **Usuario autenticado:** acceso a perfil y sus citas.
-- **Administrador:** acceso adicional a panel admin.
+📄 Licencia
 
-El control se realiza con `$_SESSION` en cada página protegida.
+Proyecto académico con fines educativos.
 
-## 9) Observaciones actuales del código
+No autorizado para uso comercial sin permiso del autor.
 
-- Existe un enlace de reserva desde `index.php` hacia `reservar.php`, pero ese archivo no está presente en este repositorio.
-- `procesar_contacto.php` contiene una implementación de ejemplo (mensaje de éxito simulado) y comentarios indicando que convendría una tabla específica para consultas.
-- El SQL incluye datos de ejemplo y algunas inserciones adicionales de prueba para poblar tablas relacionadas.
 
-## 10) Mejoras recomendadas
-
-1. Implementar `reservar.php` y flujo completo de creación/edición/cancelación de citas.
-2. Endurecer validaciones server-side (campos, longitudes, formato teléfono, etc.).
-3. Añadir protección CSRF en formularios críticos.
-4. Añadir migraciones versionadas y seeds separados.
-5. Externalizar configuración sensible (`.env`) en lugar de credenciales hardcodeadas.
-6. Crear tests funcionales y de integración para autenticación y citas.
-7. Añadir logging estructurado de errores en producción.
-
-## 11) Credenciales de ejemplo (según script SQL)
-
-El archivo `bbdd/LcQuiromasajes.sql` documenta usuarios de ejemplo y sus contraseñas en comentarios. Se recomienda cambiar estas credenciales al desplegar cualquier entorno real.
-
-## 12) Licencia
-
-Proyecto académico (TFG/Proyecto final DAW). Ajusta este apartado con la licencia que quieras aplicar (`MIT`, `Apache-2.0`, etc.) si planeas publicarlo.
+Ahora mismo este README ya tiene nivel bastante profesional para un TFG DAW 💼✨
