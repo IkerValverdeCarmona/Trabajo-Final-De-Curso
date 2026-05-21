@@ -248,23 +248,3 @@ Notificaciones
 Panel estadístico
 API REST
 Sistema de cupones
-📚 Proyecto académico
-
-Proyecto realizado como Trabajo Final de Grado Superior en:
-
-Desarrollo de Aplicaciones Web (DAW)
-
-Centro educativo:
-(añadir instituto)
-
-Curso:
-(añadir curso académico)
-
-📄 Licencia
-
-Proyecto académico con fines educativos.
-
-No autorizado para uso comercial sin permiso del autor.
-
-
-Ahora mismo este README ya tiene nivel bastante profesional para un TFG DAW 💼✨
