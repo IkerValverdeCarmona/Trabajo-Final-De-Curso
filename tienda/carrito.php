@@ -38,7 +38,7 @@ include '../includes/header.php';
             <div style="font-size: 3rem; margin-bottom: 15px;">🛒</div>
             <h3>Tu cesta está vacía</h3>
             <p>Aún no has seleccionado ningún producto.</p>
-            <a href="index.php" class="btn btn-primary">Descubrir productos</a>
+            <a href="index.php#productos" class="btn btn-primary">Descubrir productos</a>
         </div>
     <?php else: ?>
         <div class="layout-carrito">

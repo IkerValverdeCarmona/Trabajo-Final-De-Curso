@@ -9,21 +9,41 @@ if (!isset($_SESSION['user_id'])) {
 
 $id_perfil = $_SESSION['user_id'];
 $mensaje = "";
+$es_error = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
-    $nuevo_nombre = $_POST['nombre'];
-    $nuevo_apellido = $_POST['apellido'];
-    $nuevo_telefono = $_POST['telefono'];
+    
+    // Usamos mb_convert_case para que respete los acentos y las ñ (ej: "luis" -> "Luis") De forma automatica y trim para eliminar espacios al inicio y al final
+    $nuevo_nombre = mb_convert_case(trim($_POST['nombre']), MB_CASE_TITLE, "UTF-8");
+    $nuevo_apellido = mb_convert_case(trim($_POST['apellido']), MB_CASE_TITLE, "UTF-8");
+    $nuevo_telefono = trim($_POST['telefono']); 
 
-    try {
-        $sql = "UPDATE Usuario SET nombre = ?, apellido = ?, telefono = ? WHERE id_perfil = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$nuevo_nombre, $nuevo_apellido, $nuevo_telefono, $id_perfil]);
-        
-        $_SESSION['nombre_real'] = $nuevo_nombre;
-        $mensaje = "¡Datos actualizados correctamente!";
-    } catch (PDOException $e) {
-        $mensaje = "Error al actualizar los datos.";
+    // Comprobamos que nombre y apellido solo tengan letras, espacios y acentos/ñ
+    $regex_letras = '/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u';
+    
+    if (!preg_match($regex_letras, $nuevo_nombre) || !preg_match($regex_letras, $nuevo_apellido)) {
+        $mensaje = "El nombre y los apellidos solo pueden contener letras.";
+        $es_error = true;
+    } 
+    // Comprobamos el teléfono (exactamente 9 números)
+    elseif (!preg_match('/^[0-9]{9}$/', $nuevo_telefono)) {
+        $mensaje = "El teléfono debe contener exactamente 9 números.";
+        $es_error = true;
+    } 
+    else {
+        // 3. Todo correcto, procedemos a guardar
+        try {
+            $sql = "UPDATE Usuario SET nombre = ?, apellido = ?, telefono = ? WHERE id_perfil = ?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$nuevo_nombre, $nuevo_apellido, $nuevo_telefono, $id_perfil]);
+            
+            $_SESSION['nombre_real'] = $nuevo_nombre;
+            $mensaje = "¡Datos actualizados correctamente!";
+            $es_error = false;
+        } catch (PDOException $e) {
+            $mensaje = "Error al actualizar los datos en la base de datos.";
+            $es_error = true;
+        }
     }
 }
 
@@ -47,7 +67,7 @@ include 'includes/header.php';
         
         <div class="cabecera-avatar">
             <div class="avatar-grande">
-                <?= strtoupper(substr($user['nombre'], 0, 1)) ?>
+                <?= strtoupper(substr($user['nombre'] ?? 'U', 0, 1)) ?>
             </div>
             <h1 style="font-family: var(--font-title); margin: 0; font-size: 2rem;">Mi Perfil</h1>
             <p style="opacity: 0.9; margin-top: 5px;">Gestiona tu información personal</p>
@@ -55,28 +75,54 @@ include 'includes/header.php';
 
         <div class="cuerpo-perfil">
             <?php if ($mensaje): ?>
-                <div class="alerta-exito" style="text-align: center;">✨ <?= $mensaje ?></div>
+                <div class="<?= $es_error ? 'alerta-error' : 'alerta-exito' ?>" 
+                     style="text-align: center; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 500; 
+                     <?= $es_error ? 'background-color: #fee2e2; color: #991b1b; border: 1px solid #f87171;' : 'background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0;' ?>">
+                    <?= $es_error ? '⚠️' : '✨' ?> <?= $mensaje ?>
+                </div>
             <?php endif; ?>
 
             <form method="POST" action="perfil.php" class="grid-formularios">
                 <div class="col-span-2">
                     <label>Correo Electrónico (No editable)</label>
-                    <input type="email" value="<?= htmlspecialchars($user['email']) ?>" disabled class="input-disabled">
+                    <input type="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" disabled class="input-disabled">
                 </div>
 
                 <div class="grupo-entrada">
                     <label>Nombre</label>
-                    <input type="text" name="nombre" value="<?= htmlspecialchars($user['nombre']) ?>" required class="input-control">
+                    <input type="text" 
+                           name="nombre" 
+                           value="<?= htmlspecialchars($user['nombre'] ?? '') ?>" 
+                           required 
+                           class="input-control"
+                           pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+"
+                           title="Solo se permiten letras"
+                           style="text-transform: capitalize;">
                 </div>
 
                 <div class="grupo-entrada">
                     <label>Apellidos</label>
-                    <input type="text" name="apellido" value="<?= htmlspecialchars($user['apellido']) ?>" required class="input-control">
+                    <input type="text" 
+                           name="apellido" 
+                           value="<?= htmlspecialchars($user['apellido'] ?? '') ?>" 
+                           required 
+                           class="input-control"
+                           pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+"
+                           title="Solo se permiten letras"
+                           style="text-transform: capitalize;">
                 </div>
 
                 <div class="col-span-2 grupo-entrada">
                     <label>Teléfono de contacto</label>
-                    <input type="text" name="telefono" value="<?= htmlspecialchars($user['telefono']) ?>" required class="input-control">
+                    <input type="tel" 
+                           name="telefono" 
+                           value="<?= htmlspecialchars($user['telefono'] ?? '') ?>" 
+                           required 
+                           class="input-control"
+                           pattern="[0-9]{9}" 
+                           maxlength="9"
+                           title="Debe contener exactamente 9 números"
+                           placeholder="Ej: 612345678">
                 </div>
 
                 <div class="col-span-2">
