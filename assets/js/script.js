@@ -1,26 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Efecto en la barra de navegación al hacer scroll
-    const navbar = document.getElementById('navbar');
+    const navbar = document.querySelector('.navbar-custom');
     if (navbar) {
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
                 navbar.style.padding = '10px 0';
-                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+                navbar.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.08)';
             } else {
                 navbar.style.padding = '15px 0';
-                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.03)';
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.04)';
             }
         });
     }
 
-    // 2. Menú de navegación móvil (Hamburguesa)
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const navLinks = document.getElementById('navLinks');
+    // 2. Menú de navegación móvil
+    const mobileMenuBtn = document.getElementById('mobileMenuToggle');
+    const navMenu = document.getElementById('navMenu');
 
-    if (mobileMenuBtn && navLinks) {
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+    if (mobileMenuBtn && navMenu) {
+        // Limpiar spans duplicados — dejar solo 3
+        const spans = mobileMenuBtn.querySelectorAll('span');
+        spans.forEach((span, i) => {
+            if (i >= 3) span.remove();
+        });
+
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
         });
     }
 
@@ -31,40 +39,34 @@ document.addEventListener('DOMContentLoaded', () => {
     if (userMenuBtn && userDropdown) {
         userMenuBtn.addEventListener('click', (event) => {
             event.stopPropagation();
-            
-            if (userDropdown.style.display === "none" || userDropdown.style.display === "") {
-                userDropdown.style.display = "block";
-                setTimeout(() => userDropdown.classList.add('show'), 10);
-            } else {
-                userDropdown.classList.remove('show');
-                setTimeout(() => userDropdown.style.display = "none", 300);
-            }
-        });
-
-        // Cerrar al hacer clic fuera
-        document.addEventListener('click', (event) => {
-            if (!userMenuBtn.contains(event.target) && !userDropdown.contains(event.target)) {
-                userDropdown.classList.remove('show');
-                setTimeout(() => userDropdown.style.display = "none", 300);
-            }
+            userDropdown.classList.toggle('show');
         });
     }
 
-    // 4. Simulación de buscador y botones
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const query = e.target.value.trim();
-                if (query) console.log(`Buscando terapia: ${query}`);
+    // Cierre global al hacer clic fuera
+    document.addEventListener('click', (event) => {
+        if (userDropdown && userDropdown.classList.contains('show')) {
+            if (!userMenuBtn?.contains(event.target) && !userDropdown.contains(event.target)) {
+                userDropdown.classList.remove('show');
             }
-        });
-    }
+        }
+        if (navMenu && navMenu.classList.contains('active')) {
+            if (!navMenu.contains(event.target) && !mobileMenuBtn?.contains(event.target)) {
+                navMenu.classList.remove('active');
+                mobileMenuBtn?.classList.remove('active');
+            }
+        }
+    });
 
+    // 4. Scroll suave
     const btnReservarHero = document.getElementById('btnReservarHero');
     if (btnReservarHero) {
-        btnReservarHero.addEventListener('click', () => {
-            document.querySelector('#servicios').scrollIntoView({ behavior: 'smooth' });
+        btnReservarHero.addEventListener('click', (e) => {
+            const servicios = document.querySelector('#servicios');
+            if (servicios) {
+                e.preventDefault();
+                servicios.scrollIntoView({ behavior: 'smooth' });
+            }
         });
     }
 });

@@ -29,6 +29,6 @@ session_unset();
 session_destroy();
 
 // Redirigimos a la página principal
-header("Location: ../index.php");
+header("Location: ../public/index.php");
 exit;
 ?>
