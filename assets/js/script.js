@@ -1,7 +1,6 @@
-
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Efecto en la barra de navegación al hacer scroll
+    // 1. Efecto en la barra de navegación al hacer scroll
     const navbar = document.querySelector('.navbar-custom');
     if (navbar) {
         window.addEventListener('scroll', () => {
@@ -15,53 +14,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Menú de navegación móvil (Hamburguesa)
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const navLinks = document.querySelector('.nav-links-list');
+    // 2. Menú de navegación móvil
+    const mobileMenuBtn = document.getElementById('mobileMenuToggle');
+    const navMenu = document.getElementById('navMenu');
 
-    if (mobileMenuBtn && navLinks) {
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+    if (mobileMenuBtn && navMenu) {
+        // Limpiar spans duplicados — dejar solo 3
+        const spans = mobileMenuBtn.querySelectorAll('span');
+        spans.forEach((span, i) => {
+            if (i >= 3) span.remove();
+        });
+
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
         });
     }
 
-    // Menú de Usuario (Dropdown)
+    // 3. Menú de Usuario (Dropdown)
     const userMenuBtn = document.getElementById('userMenuBtn');
     const userDropdown = document.getElementById('userDropdown');
 
     if (userMenuBtn && userDropdown) {
-        // Abrir/Cerrar
         userMenuBtn.addEventListener('click', (event) => {
             event.stopPropagation();
             userDropdown.classList.toggle('show');
         });
+    }
 
-        // Cerrar al hacer clic fuera
-        document.addEventListener('click', (event) => {
-            if (!userMenuBtn.contains(event.target) && !userDropdown.contains(event.target)) {
+    // Cierre global al hacer clic fuera
+    document.addEventListener('click', (event) => {
+        if (userDropdown && userDropdown.classList.contains('show')) {
+            if (!userMenuBtn?.contains(event.target) && !userDropdown.contains(event.target)) {
                 userDropdown.classList.remove('show');
             }
-        });
-    }
-
-    // Simulación de buscador y botones
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const query = e.target.value.trim();
-                if (query) console.log(`Buscando terapia: ${query}`);
+        }
+        if (navMenu && navMenu.classList.contains('active')) {
+            if (!navMenu.contains(event.target) && !mobileMenuBtn?.contains(event.target)) {
+                navMenu.classList.remove('active');
+                mobileMenuBtn?.classList.remove('active');
             }
-        });
-    }
+        }
+    });
 
-    // Scroll suave desde el botón del Hero
+    // 4. Scroll suave
     const btnReservarHero = document.getElementById('btnReservarHero');
     if (btnReservarHero) {
         btnReservarHero.addEventListener('click', (e) => {
             const servicios = document.querySelector('#servicios');
             if (servicios) {
-                e.preventDefault(); 
+                e.preventDefault();
                 servicios.scrollIntoView({ behavior: 'smooth' });
             }
         });

@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($rol === 'admin' || $rol === 'trabajador') {
                 header("Location: ../admin/index.php");
             } else {
-                header("Location: ../index.php");
+                header("Location: ../public/index.php");
             }
             exit();
 

@@ -63,7 +63,7 @@ if (isset($_GET['code'])) {
     } catch (PDOException $e_cart) {
         error_log("Error recuperando carrito Google: " . $e_cart->getMessage());
     }
-    header("Location: ../index.php");
+    header("Location: ../public/index.php");
     exit();
 }
 ?>

@@ -1,16 +1,26 @@
-<?php     
-if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || 
-    (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
+<?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+if (
+    (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ||
+    (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+) {
     $protocolo = "https";
 } else {
     $protocolo = "http";
 }
-define('BASE_URL', $protocolo . '://' . $_SERVER['HTTP_HOST'] . '/');
 
-$host = 'sql113.byetcluster.com';
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/');
+}
+
+$host = 'sql313.infinityfree.com';
 $db   = 'if0_41971932_lcquiro';
 $user = 'if0_41971932';
-$pass = 'Yfd7usEiAovZ'; 
+$pass = 'QuiroServer2026';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -22,8 +32,8 @@ $options = [
 ];
 
 try {
-     $pdo = new PDO($dsn, $user, $pass, $options);
+    $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-     throw new \PDOException($e->getMessage(), (int)$e->getCode());
+    die($e->getMessage());
 }
 ?>

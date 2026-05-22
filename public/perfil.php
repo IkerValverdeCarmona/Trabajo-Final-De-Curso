@@ -1,9 +1,11 @@
 <?php
 session_start();
-require_once 'includes/db.php';
+if (!defined("BASE_URL")) define("BASE_URL", "../");
+if (!defined("PAGE_URL")) define("PAGE_URL", "../public/");
+require_once '../includes/db.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: auth/login.php");
+    header("Location: " . BASE_URL . "auth/login.php");
     exit;
 }
 
@@ -13,25 +15,21 @@ $es_error = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
     
-    // Usamos mb_convert_case para que respete los acentos y las ñ (ej: "luis" -> "Luis") De forma automatica y trim para eliminar espacios al inicio y al final
     $nuevo_nombre = mb_convert_case(trim($_POST['nombre']), MB_CASE_TITLE, "UTF-8");
     $nuevo_apellido = mb_convert_case(trim($_POST['apellido']), MB_CASE_TITLE, "UTF-8");
     $nuevo_telefono = trim($_POST['telefono']); 
 
-    // Comprobamos que nombre y apellido solo tengan letras, espacios y acentos/ñ
     $regex_letras = '/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u';
     
     if (!preg_match($regex_letras, $nuevo_nombre) || !preg_match($regex_letras, $nuevo_apellido)) {
         $mensaje = "El nombre y los apellidos solo pueden contener letras.";
         $es_error = true;
     } 
-    // Comprobamos el teléfono (exactamente 9 números)
     elseif (!preg_match('/^[0-9]{9}$/', $nuevo_telefono)) {
         $mensaje = "El teléfono debe contener exactamente 9 números.";
         $es_error = true;
     } 
     else {
-        // 3. Todo correcto, procedemos a guardar
         try {
             $sql = "UPDATE Usuario SET nombre = ?, apellido = ?, telefono = ? WHERE id_perfil = ?";
             $stmt = $pdo->prepare($sql);
@@ -57,7 +55,7 @@ try {
     die("Error al cargar el perfil.");
 }
 
-include 'includes/header.php';
+include '../includes/header.php';
 ?>
 
 <div class="hero-seccion" style="padding-bottom: 100px;"></div>
@@ -137,4 +135,4 @@ include 'includes/header.php';
     </div>
 </main>
 
-<?php include 'includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>

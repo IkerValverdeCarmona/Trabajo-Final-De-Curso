@@ -1,7 +1,7 @@
 <?php 
 session_start(); 
-require_once 'includes/db.php'; 
-require_once 'includes/header.php';
+require_once '../includes/db.php'; 
+require_once '../includes/header.php';
 
 // Consulta para Servicios Destacados
 $sql = "SELECT * FROM Servicios 
@@ -58,8 +58,8 @@ try {
 
             <?php
             $destino_reserva = isset($_SESSION['user_id']) 
-                ? 'reservar.php' 
-                : 'auth/login.php';
+                ? PAGE_URL . "reservar.php" 
+                : BASE_URL . "auth/login.php";
             ?>
 
             <a href="<?= $destino_reserva ?>" class="btn btn-primary">
@@ -151,7 +151,7 @@ try {
                 </div>
 
                 <a 
-                    href="reservar.php?id=<?php echo $servicio['id_servicio']; ?>" 
+                    href="<?php echo PAGE_URL; ?>reservar.php?id=<?php echo $servicio['id_servicio']; ?>" 
                     class="btn btn-outline-primary btn-sm"
                 >
                     Reservar ahora
@@ -165,7 +165,7 @@ try {
 
     <div style="text-align: center; margin-top: 50px;">
 
-        <a href="tienda/index.php#tratamientos" class="btn btn-primary">
+        <a href="<?php echo BASE_URL; ?>tienda/index.php#tratamientos" class="btn btn-primary">
             Ver todos los tratamientos
         </a>
 
@@ -209,9 +209,9 @@ try {
 
                     $id_perfil = (int)$r['id_perfil'];
 
-                    $stmtPerfil = $pdo->query("
+                     $stmtPerfil = $pdo->query("
                         SELECT email 
-                        FROM Perfiles 
+                        FROM Perfil 
                         WHERE id_perfil = $id_perfil 
                         LIMIT 1
                     ");
@@ -224,8 +224,8 @@ try {
                 }
 
                 // Valoración segura
-                $valoracion = isset($r['valoracion']) 
-                    ? (int)$r['valoracion'] 
+                $valoracion = isset($r['puntuacion']) 
+                    ? (int)$r['puntuacion'] 
                     : 5;
 
                 // Comentario seguro
@@ -233,6 +233,7 @@ try {
                     ? $r['comentario'] 
                     : 'Excelente servicio.';
                 ?>
+        
 
                 <div style="
                     background: #FFFFFF;
@@ -304,4 +305,4 @@ try {
 
 </main>
 
-<?php include 'includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>
