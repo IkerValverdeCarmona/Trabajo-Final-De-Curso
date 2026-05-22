@@ -1,8 +1,10 @@
 <?php
 session_start();
-require_once 'includes/db.php';
+if (!defined("BASE_URL")) define("BASE_URL", "../");
+if (!defined("PAGE_URL")) define("PAGE_URL", "../public/");
+require_once '../includes/db.php';
 if (!isset($_SESSION['user_id'])) {
-    header("Location: auth/login.php");
+    header("Location: " . BASE_URL . "auth/login.php");
     exit;
 }
 
@@ -18,7 +20,7 @@ try {
     die("Error crítico en la base de datos: " . $e->getMessage());
 }
 
-include 'includes/header.php';
+include '../includes/header.php';
 ?>
 
 <div class="hero-seccion">
@@ -36,7 +38,7 @@ include 'includes/header.php';
             <div class="tarjeta-vacia-icono">🛍️</div>
             <h3>Aún no has hecho ningún pedido</h3>
             <p style="color: #777; margin-bottom: 25px;">Descubre nuestros aceites y accesorios de bienestar.</p>
-            <a href="tienda/index.php" class="btn btn-primary">Ir a la tienda</a>
+            <a href="<?php echo BASE_URL; ?>tienda/index.php" class="btn btn-primary">Ir a la tienda</a>
         </div>
     <?php else: ?>
         <div style="display: grid; gap: 20px;">
@@ -72,4 +74,4 @@ include 'includes/header.php';
     <?php endif; ?>
 </main>
 
-<?php include 'includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>

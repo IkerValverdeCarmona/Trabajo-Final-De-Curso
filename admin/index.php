@@ -4,7 +4,7 @@ require_once '../includes/db.php';
 
 // Seguridad: Solo admin o trabajador pueden acceder
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['rol']) || ($_SESSION['rol'] !== 'admin' && $_SESSION['rol'] !== 'trabajador')) {
-    header("Location: ../index.php");
+    header("Location: ../public/index.php");
     exit;
 }
 

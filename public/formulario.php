@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include 'includes/header.php'; 
+include '../includes/header.php'; 
 ?>
 
 <div class="hero-seccion">
@@ -51,4 +51,4 @@ include 'includes/header.php';
     </form>
 </main>
 
-<?php include 'includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>

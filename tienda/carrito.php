@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../includes/db.php';
+include '../includes/header.php';
 
 // Si el usuario no está logueado, lo mandamos al login
 if (!isset($_SESSION['user_id'])) {
@@ -21,7 +22,7 @@ if (isset($_GET['quitar'])) {
     exit;
 }
 
-include '../includes/header.php';
+
 ?>
 
 <div class="hero-publico">

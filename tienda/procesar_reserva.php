@@ -4,7 +4,7 @@ require_once '../includes/db.php';
 
 // Verificación estricta de seguridad
 if (!isset($_SESSION['user_id']) || empty($_SESSION['carrito'])) {
-    header("Location: index.php");
+    header("Location: ../public/mis_pedidos.php");
     exit;
 }
 
@@ -31,7 +31,7 @@ try {
     $_SESSION['mensaje_exito'] = "¡Reserva de productos confirmada! Te esperamos el día " . date('d/m/Y', strtotime($fecha_r)) . " por la " . strtolower($hora_r) . " en nuestro centro para la recogida.";
     
     
-    header("Location: ../mis_pedidos.php");
+    header("Location: ../public/mis_pedidos.php");
     exit;
 
 } catch (PDOException $e) {

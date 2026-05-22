@@ -1,6 +1,6 @@
 <?php
 // obtener_horas.php
-require_once 'includes/db.php';
+require_once '../includes/db.php';
 
 // Comprobamos que nos han enviado una fecha
 if (isset($_GET['fecha'])) {

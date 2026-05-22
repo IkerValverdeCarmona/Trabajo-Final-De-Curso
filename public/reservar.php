@@ -1,9 +1,11 @@
 <?php
 session_start();
-require_once 'includes/db.php';
+if (!defined("BASE_URL")) define("BASE_URL", "../");
+if (!defined("PAGE_URL")) define("PAGE_URL", "../public/");
+require_once '../includes/db.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: auth/login.php");
+    header("Location: " . BASE_URL . "auth/login.php");
     exit;
 }
 $id_perfil_actual = $_SESSION['user_id']; 
@@ -78,14 +80,14 @@ if (isset($_POST['confirmar'])) {
         ]);
         
         $_SESSION['mensaje_exito'] = "¡Reserva confirmada con éxito! Te esperamos el " . date('d/m/Y', strtotime($_POST['fecha'])) . " a las " . $_POST['hora'] . ".";
-        header("Location: mis_citas.php");
+        header("Location: " . PAGE_URL . "mis_citas.php");
         exit();
     } catch (PDOException $e) {
         $mensaje = "<div class='alerta-aviso'><strong>Error al procesar la reserva:</strong><br>" . $e->getMessage() . "</div>";
     }
 }
 
-include 'includes/header.php';
+include '../includes/header.php';
 ?>
 
 <div class="hero-seccion">
@@ -173,4 +175,4 @@ include 'includes/header.php';
         </form>
     </div>
 </main>
-<?php include 'includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>

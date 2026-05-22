@@ -1,9 +1,11 @@
 <?php
 session_start();
-require_once 'includes/db.php';
+if (!defined("BASE_URL")) define("BASE_URL", "../");
+if (!defined("PAGE_URL")) define("PAGE_URL", "../public/");
+require_once '../includes/db.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: auth/login.php");
+    header("Location: " . BASE_URL . "auth/login.php");
     exit;
 }
 
@@ -29,7 +31,7 @@ try {
     die("Error al cargar las citas: " . $e->getMessage());
 }
 
-include 'includes/header.php';
+include '../includes/header.php';
 ?>
 
 <div class="hero-seccion">
@@ -48,7 +50,7 @@ include 'includes/header.php';
             <div class="tarjeta-vacia-icono">🧘‍♀️</div>
             <h3>Aún no has empezado tu viaje</h3>
             <p style="color: #777; margin-bottom: 30px;">Tu cuerpo merece un respiro. Descubre nuestros tratamientos personalizados.</p>
-            <a href="index.php#servicios" class="btn btn-primary">Explorar Tratamientos</a>
+            <a href="<?php echo PAGE_URL; ?>index.php#servicios" class="btn btn-primary">Explorar Tratamientos</a>
         </div>
     <?php else: ?>
         <div style="display: flex; flex-direction: column; gap: 40px;">
@@ -118,4 +120,4 @@ include 'includes/header.php';
     <?php endif; ?>
 </main>
 
-<?php include 'includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>
