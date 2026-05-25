@@ -51,18 +51,17 @@ La plataforma permite:
 
 ```text
 .
-├── public/
-│  ├── index.php
-│  ├── perfil.php
-│  ├── mis_citas.php
-│  ├── mis_pedidos.php
-│  ├── resenas.php
-│  ├── formulario.php
-│  ├── obtener_horas.php
-│  ├── cancelar_cita.php
-│  ├── procesar_contacto.php
-│  ├── procesar_resena.php
-│  └──reservar.php
+├── index.php
+├── perfil.php
+├── mis_citas.php
+├── mis_pedidos.php
+├── resenas.php
+├── formulario.php
+├── obtener_horas.php
+├── cancelar_cita.php
+├── procesar_contacto.php
+├── procesar_resena.php
+├── reservar.php
 ├── admin/
 │   ├── index.php
 │   ├── admin_citas.php
