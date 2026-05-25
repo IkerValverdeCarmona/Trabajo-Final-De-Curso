@@ -17,10 +17,10 @@ if (!defined('BASE_URL')) {
     define('BASE_URL', '/');
 }
 
-$host = 'sql313.infinityfree.com';
-$db   = 'if0_41971932_lcquiro';
-$user = 'if0_41971932';
-$pass = 'QuiroServer2026';
+$host = 'sql304.infinityfree.com';
+$db   = 'if0_41991673_lcquiromasajes';
+$user = 'if0_41991673';
+$pass = 'LcQuiro2026';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
